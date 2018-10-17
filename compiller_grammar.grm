@@ -1,0 +1,75 @@
+﻿"Name"     = 'RichardGrammar'
+"Author"   = 'Sessão de Sarinho'
+"Version"  = 'The version of the grammar and/or language'
+"About"    = 'A short description of the grammar'
+
+"Start Symbol" = <Program>
+
+! -------------------------------------------------
+! Character Sets
+! -------------------------------------------------
+
+{ID Head}      = {Letter} + [_]
+{ID Tail}      = {Alphanumeric} + [_]
+{String Chars} = {Printable} + {HT} - ["\]
+
+! -------------------------------------------------
+! Terminals
+! -------------------------------------------------
+
+Identifier    = {ID Head}{ID Tail}*
+StringLiteral = '"' ( {String Chars} | '\' {Printable} )* '"'
+
+! -------------------------------------------------
+! Rules
+! -------------------------------------------------
+
+! The grammar starts below
+<Program>              ::= <Class> | <Constants>
+
+<Expression>           ::= <Expression> '>'  <Add Exp> 
+                        |  <Expression> '<'  <Add Exp> 
+                        |  <Expression> '<=' <Add Exp> 
+                        |  <Expression> '>=' <Add Exp>
+                        |  <Expression> '==' <Add Exp>    !Equal
+                        |  <Expression> '!=' <Add Exp>    !Not equal
+                        |  <Add Exp> 
+
+<Add Exp>              ::= <Add Exp> '+' <Mult Exp>
+                        |  <Add Exp> '-' <Mult Exp>
+                        |  <Mult Exp> 
+                        |  <Add Exp> '++' <Mult Exp>
+
+<Mult Exp>             ::= <Mult Exp> '*' <Expression> 
+                        |  <Mult Exp> '/' <Expression> 
+                        |  <Expression> 
+
+!Add more values to the rule below - as needed
+
+<Value>                ::= Identifier
+                           |  '(' <Expression> ')'
+
+<Declaration>          ::= <Type> + Identifier
+
+<Type>                 ::= 'string' | 'int' | boolean | Identifier
+
+<Constant Assignment>  ::= <Declaration> + '=' <Value> [',' + Identifier + '=' <Value>]*
+
+<Variable Assignment>  ::= <Declaration> [['=' <Value>] ',' + Identifier ['=' <Value>]]*
+
+<Constants>	           ::= 'constant' + '{' + {<Constant Assignment> + ';'} + '}'
+
+<Variable>             ::= 'variables' + '{' + {<Variable Assignment> + ';'} + '}'
+
+<Class>                ::= 'class' + Identifier + ['extends' Identifier] + '{' + <Variable> | <Methods> + '}'
+
+<Parameters>           ::= <Type> + Identifier [',' + <Parameters>]*
+
+<Methods>              ::= 'method' + <Type> + Identifier + '(' + <Parameters> + ')' + <Code Block>
+
+<Code Block>           ::= '{' + <Code Statements> + '}'
+
+<Code Statements       ::= <If-Block> [<Code Statements>] | <Looping-Block> [<Code Statements>]
+                        | <Line Code> [<Code Statements>]
+
+<Line Code>            ::= <Expression> + ';' | 'return' [<Value>] + ';'
