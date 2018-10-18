@@ -1,0 +1,55 @@
+﻿"Case Sensitive"    = True               
+"Start Symbol"      = <inicio>                 
+{CabecaDoIdentificador} = {Letter}
+{CaudaDoIdentificador}  = {Alphanumeric} + [_]
+{StringSimbolos}= {Printable}-["\]
+                
+identificador   = {CabecaDoIdentificador}{CaudaDoIdentificador}*
+Digitos         = ( '-' )? {Number}+ ( '.' {Number}+ )?
+CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
+        
+<numero> ::= Digitos 
+                  
+<valor> ::= Digitos | CadeiaDeCaracteres | true | false
+         
+<tipo> ::= identificador
+        
+<id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
+      
+<vazio> ::= ! jeito que encontrei de fazer o comando vazio
+      
+<blococonst> ::= const '{' <inicializarConst> '}' 
+              
+<inicializarConst> ::= <tipo> <inicializarVar> ';' <inicializarConst> | <vazio>
+                         
+<vetor> ::= '[' <numero> ']' | '[' <numero> ']' <vetor> 
+        
+<blocovar> ::= variables '{' <declararInicializarVar> '}'  
+            
+<declararInicializarVar> ::= <tipo> <declararInicializar> ';' <declararInicializarVar> | <vazio>
+                                                            
+<declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <declararInicializar>
+                                                  
+<inicializarVar> ::=<id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <inicializarVar>            
+
+<inicio> ::= <comando>
+          
+<comando> ::= <blococonst> <comando> | <blocovar> <comando> | <vazio>
+          
+<valorInicial> ::= <valor> | <iniciarVetor> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
+          
+<iniciarVetor> ::= '{' <iniciarVetor2> '}' ! cria as chaves externas da inicialização do vetor
+                
+<iniciarVetor2> ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor
+                 
+<iniciarVetor3> ::= <numero> | <numero> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
+          
+               
+
+                  
+
+                     
+
+
+
+
