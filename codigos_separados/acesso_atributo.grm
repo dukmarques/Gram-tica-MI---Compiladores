@@ -1,0 +1,10 @@
+﻿"Start Symbol"  = <Inicio> 
+                
+! Elementos Terminais
+Identificador      =  {Letter}({AlphaNumeric} | '_')*
+               
+!Não Terminais
+<Inicio> ::= <Acesso a atributo> <Inicio> | <Acesso a atributo>
+
+<NomeClasse> ::= Identificador
+<Acesso a atributo> ::= <NomeClasse>'.'Identificador';'
