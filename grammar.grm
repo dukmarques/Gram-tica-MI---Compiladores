@@ -1,4 +1,4 @@
-"Name"     = 'Enter the name of the grammar'
+﻿"Name"     = 'Enter the name of the grammar'
 "Author"   = 'Enter your name'
 "Version"  = 'The version of the grammar and/or language'
 "About"    = 'A short description of the grammar'
@@ -52,6 +52,14 @@ Identifier   = {Letter}({AlphaNumeric} | '_')*
 !Add more values to the rule below - as needed
 
 <Value>                ::= Identifier |  '(' <Expression> ')' | 'true' | 'false'
+                        
+<valorInicial>         ::= <Value> | <iniciarVetor> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
+          
+<iniciarVetor>         ::= '{' <iniciarVetor2> '}' ! cria as chaves externas da inicialização do vetor
+                
+<iniciarVetor2>        ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor
+                 
+<iniciarVetor3>        ::= <Value> | <Value> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
 
 <Declaration>          ::= <Type> Identifier
 
