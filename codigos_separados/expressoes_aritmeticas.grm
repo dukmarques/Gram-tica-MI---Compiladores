@@ -1,0 +1,57 @@
+﻿"Name"          = 'Linguagem'
+"Author"        = 'Marcos Lima && Gustavo'
+"Start Symbol"  = <Inicio>
+
+{String Chars} = {Printable} + {HT} - ["\]
+Identificador   = {Letter}({AlphaNumeric} | '_')*
+Numero          = ('-')?{Number}+('.'{Number}+)?
+CadeiaCaracter  = '"' ( {String Chars} | '\' {Printable} )* '"'           
+
+!Inicio de programa
+<Inicio> ::= <DeclConst> <Classe> | <Classe>
+         
+
+!Classe
+<Classe>    ::= 'class' Identificador <Herdar> '{' <Decl> '}' 
+
+!Nao terminais gerais
+<Tipo>      ::= 'int'|'float'|'string'|'bool'
+<Valor>     ::= CadeiaCaracter | <ExprecoesAritmeticas>
+<ArgMet>    ::= <Tipo> Identificador ',' <ArgMet> 
+             | <Tipo> Identificador
+             | <Tipo> '['']' Identificador ',' <ArgMet>
+             | <Tipo> '['']' Identificador
+             | 
+<Herdar>    ::= 'extends' Identificador |
+
+!Declaração de variaveis, metodos e objetos
+<Decl>      ::= <DeclVar> <Decl> | <DeclConst> | <Metodo> <Decl> |
+
+!Declaração de Variavel
+<DeclVar>   ::= 'variables' '{' <TipoVar> '}'
+<TipoVar>   ::= <Tipo> Identificador ';' <TipoVar> 
+             | <Tipo> Identificador '=' <Valor> ';' <TipoVar> 
+             | <Tipo> Identificador ';'
+             | <Tipo> Identificador '=' <Valor> ';'
+<DeclConst> ::= 'const' '{' <TipoConst> '}'
+<TipoConst> ::= <Tipo> Identificador '=' <Valor> ';' <TipoConst> 
+             | <Tipo> Identificador '=' <Valor> ';'
+
+             
+!Declaração de metodo
+<Metodo>    ::= 'method' <Tipo> Identificador '('<ArgMet>')' '{' 'return' identificador '}' <Metodo>
+             | 'method' 'void' Identificador '('<ArgMet>')' '{' '}' <Metodo>
+             | 'method' <Tipo> Identificador '('<ArgMet>')' '{' 'return' identificador '}'
+             | 'method' 'void' Identificador '('<ArgMet>')' '{' '}'
+             
+!Operador Aritmetico
+<ExpressoesAritmeticas> ::= '('<ExpressoesAritmeticas>')'
+                        |'('<ExpressoesAritmeticas>')' <OperadorAritmetico> <ExpressoesAritmeticas> ';'
+                        | '('<SintaxeExpressao>')'
+                        | '('<SintaxeExpressao>')' <OperadorAritmetico> <ExpressoesAritmeticas> ';'
+                        | <SintaxeExpressao>';' 
+                        
+<SintaxeExpressao>     ::= <ArgumentoAritmetico> <OperadorAritmetico> <ArgumentoAritmetico>
+                        |  <ArgumentoAritmetico> <OperadorAritmetico> <ArgumentoAritmetico> <OperadorAritmetico> <SintaxeExpressao>
+<ArgumentoAritmetico>  ::= Identificador | Numero
+<OperadorAritmetico>   ::= '+'|'-'|'*'|'/'|'%'
