@@ -17,13 +17,15 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
 {StringSimbolos}= {Printable}-["\]
 <numero> ::= Numero                   
 <valor> ::= Numero | CadeiaDeCaracteres | Boolean
+<elemento> ::= Numero | <id>
+<elementotop> ::= CadeiaDeCaracteres | <elemento>
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
 <vazio> ::= ! jeito que encontrei de fazer o comando vazio
-<vetor> ::= '[' <numero> ']' | '[' <numero> ']' <vetor> 
+<vetor> ::= '[' <elemento> ']' | '[' <elemento> ']' <vetor> 
 <iniciarVetor> ::= '{' <iniciarVetor2> '}' ! cria as chaves externas da inicialização do vetor                
 <iniciarVetor2> ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor                 
-<iniciarVetor3> ::= <numero> | <numero> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
+<iniciarVetor3> ::= <elementotop> | <elementotop> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
 
 
 !Definições Básicas
