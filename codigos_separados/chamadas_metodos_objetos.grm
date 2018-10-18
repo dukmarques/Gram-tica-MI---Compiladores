@@ -1,0 +1,41 @@
+﻿"Name" = 'Chamada de método com um objeto'
+"Author" = 'Eduardo Marques'
+
+"Case Sensitive"    = True
+"Start Symbol"      = <inicio>
+{CabecaIdentificador} = {Letter}
+{CaudaIdentificador}  = {Alphanumeric} + [_]
+{String} = {Printable}-["\]
+
+Digitos             = ('-')? {Number}+ ( '.' {Number}+)?
+CadeiaCaracteres    = '"' ({String} | '\' {Printable})* '"'
+Identificador       = {CabecaIdentificador}{CaudaIdentificador}*
+Boolean             = true | false
+Operador            = '+' | '-' | '*' | '/'
+
+<valor> ::= Digitos | Identificador !Utilizado para operações aritméticas dentro dos parâmetros
+                    
+<aritmetica> ::= <valor> Operador <valor>
+                             
+<nomeMethod> ::= Identificador
+
+<nomeObjt>   ::= Identificador
+
+<parametro> ::= Digitos 
+             | CadeiaCaracteres 
+             | Identificador 
+             | Boolean
+             | <aritmetica> 
+             | <methodEmParametro> !Parâmetros que utilizam o retorno de outro método como valor
+             | !<vazio>
+
+<parametros> ::= <parametro> 
+              | <parametro> ',' <parametros>
+             
+<methodEmParametro> ::= <nomeObjt> '.' <NomeMethod> '(' <parametros> ')'
+
+<chamadaMethod> ::= <methodEmParametro> ';'
+
+<inicio> ::= <comando>
+          
+<comando> ::= <chamadaMethod>
