@@ -11,7 +11,7 @@
 * Marcos Vinícius
 * Marcus Aldrey
 * Gilvaney
-* Nielson
+* Nielson Vágno
 * Lucas Cardoso
 * André
 
