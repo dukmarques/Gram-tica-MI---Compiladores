@@ -1,0 +1,30 @@
+"Start Symbol"  = <Inicio> 
+                
+! Elementos Terminais
+Identificador      =  
+{Letter}({AlphaNumeric} | '_')*
+Numero          = {Number}+  ('.'{Number}+ 
+)?
+Boolean        =  'true' | 'false'
+Vetor = ('[]')+
+               
+!Não Terminais
+
+!Definições Básicas
+<Inicio> ::= <Chamada a metodo>
+          
+!Chamada a método
+<NomeClasse> ::= Identificador
+<Chamada a metodo> ::= 
+<NomeClasse>'.'Identificador'('<Lista de 
+parametros>');'
+                       | 
+<NomeClasse>'.'Identificador'('<Lista de 
+parametros>');'<Chamada a metodo>
+<Lista de parametros> ::= Numero','<Lista 
+de parametros> | Identificador','<Lista de 
+parametros>
+                       | Boolean','<Lista 
+de parametros> | Identificador Vetor
+                       | Numero | 
+Identificador | Boolean |
