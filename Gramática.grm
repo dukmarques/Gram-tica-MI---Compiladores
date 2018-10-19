@@ -1,4 +1,4 @@
-﻿! Welcome to GOLD Parser Builder 5.2
+! Welcome to GOLD Parser Builder 5.2
 "Name"          = 'Gramatica'
 "Author"        = 'PBL'
 "Version"       = '1.0'
@@ -37,7 +37,7 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
         
 !Classe
 <Classe> ::= 'class' <NomeClasse> '{' <Codigo> '}' <Classe> | 'class' <NomeClasse> 'extends' <NomeClasse> '{' <Codigo> '}' <Classe> |
-<Codigo> ::= <Atributos> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
+<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
 <NomeClasse> ::= Identificador
 
 !Constantes                   
@@ -52,7 +52,7 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <declararInicializar>
 
                  
-!Atributos
+!Atributos ! essa parte aqui não precisa utilizar... usa só o bloco variaveis de cima...
 <Atributos> ::= 'variables' '{' <MultAtributos> '}' 
 <MultAtributos> ::= <Tipos> <DeclaracaoAtributos> ';' <MultAtributos> |           
 <DeclaracaoAtributos> ::= <Argumento> ',' <DeclaracaoAtributos> | <Argumento> |
