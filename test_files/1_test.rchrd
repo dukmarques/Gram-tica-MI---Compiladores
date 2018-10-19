@@ -5,11 +5,14 @@ const {
 
 class Pokemon{
     variables {
-        int life[2] = {12, 12}, iv[4] = {10, 21, 7, 19};
+        int life[2] = {(12, 12)}, iv[4] = {(10, 21, 7, 19)};
+        int idade = 2018-1997;
+        int peso = 75;
+        int imc  = peso/(1.78*1.78);
         string name;        
     }
 
-    method boolean attack(int enemyLife){
+    method bool attack(int enemyLife){
         variables {
             int newLife;
         }

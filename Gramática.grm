@@ -1,4 +1,4 @@
-! Welcome to GOLD Parser Builder 5.2
+﻿! Welcome to GOLD Parser Builder 5.2
 "Name"          = 'Gramatica'
 "Author"        = 'PBL'
 "Version"       = '1.0'
@@ -6,17 +6,19 @@
 "Start Symbol"  = <Inicio> 
                 
 ! Elementos Terminais
-Identificador      =  {Letter}({AlphaNumeric} | '_')* | {CabecaDoIdentificador}{CaudaDoIdentificador}*
-Numero          = ( '-' )? {Number}+  ('.'{Number}+ )?
-Boolean        =  'true' | 'false'
-CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
+Identificador      = {Letter}({AlphaNumeric} | '_')* | {CabecaDoIdentificador}{CaudaDoIdentificador}*
+!Numero             = ( '-' )? {Number}+  ('.'{Number}+ )?
+Numero             = {Number}+('.'{Number}+)?
+Boolean            =  'true' | 'false'
+CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
                
 !Não Terminais
 {CabecaDoIdentificador} = {Letter}
 {CaudaDoIdentificador}  = {Alphanumeric} + [_]
 {StringSimbolos}= {Printable}-["\]
-<numero> ::= Numero                   
+<numero> ::= Numero | '-'Numero |                 
 <valor> ::= Numero | CadeiaDeCaracteres | Boolean
+<valorSemNum> ::= CadeiaDeCaracteres | Boolean
 <elemento> ::= Numero | <id>
 <elementotop> ::= CadeiaDeCaracteres | <elemento>
 !<tipo> ::= identificador
@@ -44,7 +46,7 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <blococonst> ::= const '{' <inicializarConst> '}' 
 <inicializarConst> ::= <tipo> <inicializarVar> ';' <inicializarConst> | <vazio>
 <inicializarVar> ::=<id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <inicializarVar>            
-<valorInicial> ::= <valor> | <iniciarVetor> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
+<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
 
 !Variaveis
 <blocovar> ::= variables '{' <declararInicializarVar> '}'  
@@ -65,7 +67,7 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
 
 !Aleatorios          
-<Atribuicao> ::= Identificador '=' Numero ';'
+<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum
 <Argumento> ::= Identificador | <Vetor> | <Matriz>
 <Tipos> ::= <Tipo> | <NomeClasse>
 
@@ -78,9 +80,9 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <If> ::= 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}'
       | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' '{' <Codigo> '}'
       | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' <If>
-<Expressao> ::= <Valor> <OperadorRelacional> <Valor>
-             |<Valor> <OperadorRelacional> <Valor> <OperadorLogico> <Expressao>             
-<Valor> ::= Identificador | Numero
+<Expressao> ::= <valor> <OperadorRelacional> <valor>
+             |<valor> <OperadorRelacional> <valor> <OperadorLogico> <Expressao>             
+!<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTI UM NAO TERMINAL VALOR
 
 !While
 <While> ::= 'while' '(' <Expressao> ')' '{' <Codigo> '}'
@@ -90,4 +92,10 @@ CadeiaDeCaracteres        = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <ParametrosLeitura> ::= <Argumento> ',' <ParametrosLeitura> | <Argumento>        
 <Write> ::= 'write' '(' <ParametrosEscrita> ')' ';'
 <ParametrosEscrita> ::= <Argumento> ',' <ParametrosEscrita> | <Argumento> | '"' Identificador '"'
+            
+!Expressoes aritméticas
+<Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
+<Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
+<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
+<Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
          
