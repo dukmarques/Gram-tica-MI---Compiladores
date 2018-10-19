@@ -1,0 +1,36 @@
+"Name" = 'Gramatica MI compiladores'
+"Author" = 'Gilvanei Pereira Bispo'
+"Version" = '1.0.0'
+"About" = 'Feito para o PBL de compiladores'
+
+"Start Symbol" = <operacao>
+
+identificador = ( {letter} ) + ( {number} )*
+numero = ({ number })
+
+<vazio> ::=
+                     
+<logicaSimbolo> ::= '||' | '&&'
+                 
+<relacionalSimbolo> ::= '<' | '<=' | '>=' | '>' | '==' | '='
+                 
+<operacao> ::= <expressaoLogica> | <expressaoLogicaNegada> | <expressaoLogica> <operacao> | <expressaoLogicaNegada> <operacao>
+          
+<expressaoLogica> ::= <expressao> <logicaSimbolo> <expressao> | '(' <relacional> ')' | <expressao> <logicaSimbolo> <operacao> | '(' <expressaoLogica> ')'  <logicaSimbolo> | '(' <expressaoLogica> ')'  <relacionalSimbolo>
+
+<expressaoLogicaNegada> ::= '!' '(' <args> ')' | '!' '(' <args> ')' <logicaSimbolo> <expressao> | '!' '(' <args> ')' <logicaSimbolo> <operacao>
+                         
+<args> ::= <expressao> | <relacional> | <operacao>
+                         
+<expressao> ::= identificador | <rtMetodo>
+             
+<rtMetodo> ::= identificador '.' identificador '(' <arg> ')'
+            
+<arg> ::= identificador | numero | <arg> ',' identificador | <arg> ',' numero | <vazio>
+       
+<exp> ::= identificador | <rtMetodo> | numero
+       
+<relacional> ::= <exp> <relacionalSimbolo> <exp> 
+                     
+
+
