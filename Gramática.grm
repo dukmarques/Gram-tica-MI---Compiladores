@@ -17,9 +17,9 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 {CaudaDoIdentificador}  = {Alphanumeric} + [_]
 {StringSimbolos}= {Printable}-["\]
 <numero> ::= Numero | '-'Numero |                 
-<valor> ::= Numero | CadeiaDeCaracteres | Boolean
-<valorSemNum> ::= CadeiaDeCaracteres | Boolean
-<elemento> ::= Numero | <id>
+<valor> ::= Numero | CadeiaDeCaracteres | Boolean | <Acesso a atributo>
+<valorSemNum> ::= CadeiaDeCaracteres | Boolean | <Acesso a atributo>
+<elemento> ::= Numero | <id> | <Acesso a atributo>
 <elementotop> ::= CadeiaDeCaracteres | <elemento>
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
@@ -29,6 +29,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <iniciarVetor2> ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor                 
 <iniciarVetor3> ::= <elementotop> | <elementotop> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
 
+<Acesso a atributo> ::= <NomeClasse>'.'Identificador
 
 !Definições Básicas
 <Inicio> ::= <blococonst> <Classe> | <Classe>
@@ -64,7 +65,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
           | 'method' 'void' Identificador '(' <Parametros> ')' '{' <CodigoMetodo>  '}' 
           | 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' Identificador ')' ';' '}'
 <CodigoMetodo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
-<Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
+<Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> | <Acesso a atributo> |
 
 !Aleatorios          
 <Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum
@@ -96,6 +97,6 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 !Expressoes aritméticas
 <Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
 <Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
-<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
+<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | Identificador'['<Acesso a atributo>']' | '('<Expr Arit>')'
 <Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
          
