@@ -65,7 +65,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
           | 'method' 'void' Identificador '(' <Parametros> ')' '{' <CodigoMetodo>  '}' 
           | 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' Identificador ')' ';' '}'
 <CodigoMetodo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
-<Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> | <Acesso a atributo> |
+<Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
 
 !Aleatorios          
 <Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum
