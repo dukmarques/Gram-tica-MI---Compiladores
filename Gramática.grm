@@ -41,6 +41,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Classe> ::= 'class' <NomeClasse> '{' <Codigo> '}' <Classe> | 'class' <NomeClasse> 'extends' <NomeClasse> '{' <Codigo> '}' <Classe> |
 <Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo> |
 <NomeClasse> ::= Identificador
+<Acesso a atributo> ::= <NomeObjeto>'.'Identificador
 
 !Constantes                   
 <blococonst> ::= const '{' <inicializarConst> '}' 
@@ -50,10 +51,11 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 
 !Variaveis
 <blocovar> ::= variables '{' <declararInicializarVar> '}'  
-<declararInicializarVar> ::= <tipo> <declararInicializar> ';' <declararInicializarVar> | <vazio>                   
+<declararInicializarVar> ::= <tipo> <declararInicializar> ';' <declararInicializarVar> 
+                          | <Acesso a atributo>'='<valorInicial>';'<declararInicializarVar> | <vazio>
 <declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <declararInicializar>
-<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> | <MetodoComoParametro> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros
-
+<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> 
+                | <MetodoComoParametro> | <Acesso a atributo> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros
                  
 !Atributos ! essa parte aqui não precisa utilizar... usa só o bloco variaveis de cima...
 <Atributos> ::= 'variables' '{' <MultAtributos> '}' 
@@ -68,7 +70,8 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
 
 !Aleatorios          
-<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum | Identificador '=' <ChamdaMetodoObjeto>
+<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum | Identificador '=' <ChamdaMetodoObjeto> 
+              |  Identificador '=' <Acesso a atributo>';' |  <Acesso a atributo> '='<valorInicial>';'
 <Argumento> ::= Identificador | <Vetor> | <Matriz>
 <Tipos> ::= <Tipo> | <NomeClasse>
 
@@ -90,9 +93,11 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 
 !Read e Write
 <Read> ::= 'read' '(' <ParametrosLeitura> ')' ';'
-<ParametrosLeitura> ::= <Argumento> ',' <ParametrosLeitura> | <Argumento>        
+<ParametrosLeitura> ::= <Argumento> ',' <ParametrosLeitura> | <Acesso a atributo>',' <ParametrosLeitura> 
+                     | <Acesso a atributo> | <Argumento>        
 <Write> ::= 'write' '(' <ParametrosEscrita> ')' ';'
-<ParametrosEscrita> ::= <Argumento> ',' <ParametrosEscrita> | <Argumento> | '"' Identificador '"'
+<ParametrosEscrita> ::= <Argumento> ',' <ParametrosEscrita> |  <Acesso a atributo>',' <ParametrosEscrita> 
+                     | <Acesso a atributo>  | <Argumento> | '"' Identificador '"'
             
 !Expressoes aritméticas
 <Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
@@ -116,7 +121,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 !Chamadas a métodos a partir de um objeto
 <NomeMetodo> ::= Identificador
 <NomeObjeto> ::= Identificador
-<ParametroCM> ::= <valor> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' |
+<ParametroCM> ::= <valor> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
 <ParametroCM-2> ::= <ParametroCM> | <ParametroCM> ',' <ParametroCM-2> 
 <MetodoComoParametro> ::= <NomeObjeto> '.' <NomeMetodo> '(' <ParametroCM-2> ')'
 <ChamdaMetodoObjeto> ::= <MetodoComoParametro> ';' 
