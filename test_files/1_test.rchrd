@@ -1,6 +1,4 @@
     class Pokemon{
-    
-    cuscuz.iniciarPreparo(1, receita, cuscuz.getModoPreparo());
 
     variables {
         int life[2] = {(12, 12)}, iv[4] = {(10, 21, 7, 19)};
@@ -8,7 +6,10 @@
         int peso = 75;
         int imc  = peso/(1.78*1.78);
         string name;
-        float pronto = cuscuz.statusCuscuz();        
+        float pronto = cuscuz.statusCuscuz();
+        
+        int vetor[2] = {(1, v.value())};  
+        int vetorzin[] = v.value();     
     }
     
     method void tasmanianDevil(int giros){

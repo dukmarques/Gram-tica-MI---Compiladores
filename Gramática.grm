@@ -20,7 +20,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <valor> ::= Numero | CadeiaDeCaracteres | Boolean
 <valorSemNum> ::= CadeiaDeCaracteres | Boolean
 <elemento> ::= Numero | <id>
-<elementotop> ::= CadeiaDeCaracteres | <elemento>
+<elementotop> ::= CadeiaDeCaracteres | <elemento> | <MetodoComoParametro>
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
 <vazio> ::= ! jeito que encontrei de fazer o comando vazio
@@ -39,7 +39,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
         
 !Classe
 <Classe> ::= 'class' <NomeClasse> '{' <Codigo> '}' <Classe> | 'class' <NomeClasse> 'extends' <NomeClasse> '{' <Codigo> '}' <Classe> |
-<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo> |
+<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
 <NomeClasse> ::= Identificador
 <Acesso a atributo> ::= <NomeObjeto>'.'Identificador
 
