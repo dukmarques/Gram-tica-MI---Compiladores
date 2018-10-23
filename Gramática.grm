@@ -21,8 +21,6 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <valorSemNum> ::= CadeiaDeCaracteres | Boolean
 <elemento> ::= Numero | <id>
 <elementotop> ::= CadeiaDeCaracteres | <elemento>
-<logicaSimbolos> ::= '||' | '&&'               
-<relacionalSimbolos> ::= '<' | '<=' | '>=' | '>' | '==' | '='
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
 <vazio> ::= ! jeito que encontrei de fazer o comando vazio
