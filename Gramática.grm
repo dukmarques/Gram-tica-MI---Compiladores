@@ -17,9 +17,9 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 {CaudaDoIdentificador}  = {Alphanumeric} + [_]
 {StringSimbolos}= {Printable}-["\]
 <numero> ::= Numero | '-'Numero |                 
-<valor> ::= Numero | CadeiaDeCaracteres | Boolean | <Acesso a atributo>
-<valorSemNum> ::= CadeiaDeCaracteres | Boolean | <Acesso a atributo>
-<elemento> ::= Numero | <id> | <Acesso a atributo>
+<valor> ::= Numero | CadeiaDeCaracteres | Boolean
+<valorSemNum> ::= CadeiaDeCaracteres | Boolean
+<elemento> ::= Numero | <id>
 <elementotop> ::= CadeiaDeCaracteres | <elemento>
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
@@ -28,8 +28,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <iniciarVetor> ::= '{' <iniciarVetor2> '}' ! cria as chaves externas da inicialização do vetor                
 <iniciarVetor2> ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor                 
 <iniciarVetor3> ::= <elementotop> | <elementotop> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
-
-<Acesso a atributo> ::= <NomeClasse>'.'Identificador
+<Acesso a atributo> ::= <NomeObjeto>'.'Identificador
 
 !Definições Básicas
 <Inicio> ::= <blococonst> <Classe> | <Classe>
@@ -40,19 +39,22 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
         
 !Classe
 <Classe> ::= 'class' <NomeClasse> '{' <Codigo> '}' <Classe> | 'class' <NomeClasse> 'extends' <NomeClasse> '{' <Codigo> '}' <Classe> |
-<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
+<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo> |
 <NomeClasse> ::= Identificador
 
 !Constantes                   
 <blococonst> ::= const '{' <inicializarConst> '}' 
 <inicializarConst> ::= <tipo> <inicializarVar> ';' <inicializarConst> | <vazio>
-<inicializarVar> ::=<id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <inicializarVar>            
-<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
+<inicializarVar> ::=<id> '=' <valorInicialConst> | <id>  '=' <valorInicialConst> ',' <inicializarVar>            
+<valorInicialConst> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> ! Valor inicial para constantes, pois não podem receber valores de uma chamada de método.
 
 !Variaveis
 <blocovar> ::= variables '{' <declararInicializarVar> '}'  
-<declararInicializarVar> ::= <tipo> <declararInicializar> ';' <declararInicializarVar> | <vazio>                   
-<declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <declararInicializar>
+<declararInicializarVar> ::= <tipo> <declararInicializar> ';' <declararInicializarVar> 
+                          | <Acesso a atributo>'='<valorInicial>';'<declararInicializarVar> | <vazio>
+<declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> 
+                       | <id>  '=' <valorInicial> ',' <declararInicializar>
+<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> | <MetodoComoParametro> | <Acesso a atributo> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros
 
                  
 !Atributos ! essa parte aqui não precisa utilizar... usa só o bloco variaveis de cima...
@@ -64,11 +66,11 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Metodo> ::= 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' Identificador ';' '}' 
           | 'method' 'void' Identificador '(' <Parametros> ')' '{' <CodigoMetodo>  '}' 
           | 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' Identificador ')' ';' '}'
-<CodigoMetodo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
+<CodigoMetodo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo>|
 <Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
 
 !Aleatorios          
-<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum
+<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum | Identificador '=' <ChamdaMetodoObjeto>
 <Argumento> ::= Identificador | <Vetor> | <Matriz>
 <Tipos> ::= <Tipo> | <NomeClasse>
 
@@ -97,6 +99,13 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 !Expressoes aritméticas
 <Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
 <Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
-<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | Identificador'['<Acesso a atributo>']' | '('<Expr Arit>')'
+<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
 <Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
          
+!Chamadas a métodos a partir de um objeto
+<NomeMetodo> ::= Identificador
+<NomeObjeto> ::= Identificador
+<ParametroCM> ::= <valor> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
+<ParametroCM-2> ::= <ParametroCM> | <ParametroCM> ',' <ParametroCM-2> 
+<MetodoComoParametro> ::= <NomeObjeto> '.' <NomeMetodo> '(' <ParametroCM-2> ')'
+<ChamdaMetodoObjeto> ::= <MetodoComoParametro> ';' 
