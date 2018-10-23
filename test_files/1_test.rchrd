@@ -1,9 +1,5 @@
-const {
-    string name = "Alexandre", placa = "yyy-0000";
-    int b = 32;
-}
-
 class Pokemon{
+    
     cuscuz.iniciarPreparo(1, receita, cuscuz.getModoPreparo());
 
     variables {
@@ -13,6 +9,14 @@ class Pokemon{
         int imc  = peso/(1.78*1.78);
         string name;
         float pronto = cuscuz.statusCuscuz();        
+    }
+    
+    method void tasmanianDevil(int giros){
+        if(giros > 50 && velocidade == 10)then{
+            write(Taz_Loucao);        
+        }else if(giros == 0 || !(velocidade))then{
+            write(Taz_Dormiu);        
+        }
     }
 
     method bool attack(int enemyLife){
@@ -26,7 +30,7 @@ class Pokemon{
     }
 
     method void sleep(){
-	life[1] = life[2];
+        life[1] = life[2];
         cuscuz = milho.getEssencia();
     }
 

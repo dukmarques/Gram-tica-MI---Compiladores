@@ -21,6 +21,8 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <valorSemNum> ::= CadeiaDeCaracteres | Boolean
 <elemento> ::= Numero | <id>
 <elementotop> ::= CadeiaDeCaracteres | <elemento>
+<logicaSimbolos> ::= '||' | '&&'               
+<relacionalSimbolos> ::= '<' | '<=' | '>=' | '>' | '==' | '='
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
 <vazio> ::= ! jeito que encontrei de fazer o comando vazio
@@ -78,15 +80,15 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Valores> ::= Identificador | Numero
 
 !If
-<If> ::= 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}'
-      | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' '{' <Codigo> '}'
-      | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' <If>
-<Expressao> ::= <valor> <OperadorRelacional> <valor>
-             |<valor> <OperadorRelacional> <valor> <OperadorLogico> <Expressao>             
+<If> ::= 'if' '(' <operacao> ')' 'then' '{' <Codigo> '}'
+      | 'if' '(' <operacao> ')' 'then' '{' <Codigo> '}' 'else' '{' <Codigo> '}'
+      | 'if' '(' <operacao> ')' 'then' '{' <Codigo> '}' 'else' <If>
+!<Expressao> ::= <valor> <OperadorRelacional> <valor>
+             |<valor> <OperadorRelacional> <valor> <OperadorLogico> <operacao>             
 !<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTI UM NAO TERMINAL VALOR
 
 !While
-<While> ::= 'while' '(' <Expressao> ')' '{' <Codigo> '}'
+<While> ::= 'while' '(' <operacao> ')' '{' <Codigo> '}'
 
 !Read e Write
 <Read> ::= 'read' '(' <ParametrosLeitura> ')' ';'
@@ -99,6 +101,19 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
 <Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
 <Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
+                    
+!Expressoes Lógicas e Relacionais
+!Obs.: toda expressão negada deve vim entre parentíse -> ex. if(!(isVerdade)) ou if(vasco == serieA && !(vasco > ibis)) print('Vasco ainda é um clube');                
+<simLog> ::= '||' | '&&'               
+<simRel> ::= '<' | '<=' | '>=' | '>' | '==' | '='                     
+<operacao> ::= <opLr> | <opLr> <operacao>
+<opLr> ::= <opLog> | <opRel> | <opLog> <opLr> | <opRel> <opLr>        
+<termoLog> ::= identificador | <opRel> | <rtMet>
+<opLog> ::= <termoLog> <simLog> <termoLog> | <termoLog> <simLog> <termoLog> <opLog> | '!' '(' <termoLog> ')' <simLog> <termoLog> | '!' '(' <termoLog> ')' <simLog> <termoLog> <opLog> | <termoLog> <simLog> '!' '(' <termoLog> ')' | <termoLog> <simLog> '!' '(' <termoLog> ')' <opLog>
+<termoRel> ::= numero | identificador | <rtMet>
+<opRel> ::= <termoRel> <simRel> <termoRel> | <termoRel> <simRel> <termoRel> <opRel>
+<arg> ::= identificador | numero | ',' <arg> | <vazio> 
+<rtMet> ::= identificador '.' identificador '(' <arg> ')'
          
 !Chamadas a métodos a partir de um objeto
 <NomeMetodo> ::= Identificador
