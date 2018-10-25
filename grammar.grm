@@ -23,7 +23,7 @@ Identifier   = {Letter}({AlphaNumeric} | '_')*
 ! -------------------------------------------------
 
 ! The grammar starts below
-<Program>              ::= <Class> | <Constants> | <Program>
+<Program>              ::= <Class> | <Constants>
 
 <Expression>           ::= <Add Exp> '>'  <Expression> 
                         |  <Add Exp> '<'  <Expression> 
@@ -69,7 +69,7 @@ Identifier   = {Letter}({AlphaNumeric} | '_')*
 
 <Attributition>        ::= ',' Identifier '=' <Value> | ',' Identifier '=' <Value> <Attributition>
 
-<Constant Assignment>  ::= <Declaration> '=' <Value> <Attributition> ';' | <Constant Assignment>
+<Constant Assignment>  ::= <Declaration> '=' <Value> <Attributition> ';' <Constant Assignment> |
 
 <Initialize>           ::= '=' <Value> |
                         
