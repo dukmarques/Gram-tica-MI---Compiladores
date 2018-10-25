@@ -4,6 +4,7 @@
 "Version"       = '1.0'
 "About"         = 'Mi-Compiladores'
 "Start Symbol"  = <Inicio> 
+"Case Sensitive" = 'True'
                 
 ! Elementos Terminais
 Identificador      = {Letter}({AlphaNumeric} | '_')* | {CabecaDoIdentificador}{CaudaDoIdentificador}*
