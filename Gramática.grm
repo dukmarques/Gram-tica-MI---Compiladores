@@ -64,9 +64,10 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <DeclaracaoAtributos> ::= <Argumento> ',' <DeclaracaoAtributos> | <Argumento> |
                  
 !Métodos
-<Metodo> ::= 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' Identificador ';' '}' 
+<Metodo> ::= 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' <Return Met> ';' '}' 
           | 'method' 'void' Identificador '(' <Parametros> ')' '{' <CodigoMetodo>  '}' 
-          | 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' Identificador ')' ';' '}'
+          | 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' <Return Met> ')' ';' '}'
+<Return Met> ::= Identificador | <valorSemNum> | <opLog> | !<Expr Arit>
 <CodigoMetodo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo>|
 <Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
 
@@ -87,7 +88,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
       | 'if' '(' <operacao> ')' 'then' '{' <Codigo> '}' 'else' <If>
 !<Expressao> ::= <valor> <OperadorRelacional> <valor>
              |<valor> <OperadorRelacional> <valor> <OperadorLogico> <operacao>             
-!<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTI UM NAO TERMINAL VALOR
+!<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTIR UM NAO TERMINAL VALOR
 
 !While
 <While> ::= 'while' '(' <operacao> ')' '{' <Codigo> '}'
@@ -103,7 +104,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 !Expressoes aritméticas
 <Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
 <Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
-<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
+<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | <rtMet> |  '('<Expr Arit>')'
 <Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
                     
 !Expressoes Lógicas e Relacionais
@@ -112,17 +113,17 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <simRel> ::= '<' | '<=' | '>=' | '>' | '==' | '='                     
 <operacao> ::= <opLr> | <opLr> <operacao>
 <opLr> ::= <opLog> | <opRel> | <opLog> <opLr> | <opRel> <opLr>        
-<termoLog> ::= identificador | <opRel> | <rtMet>
+<termoLog> ::= Identificador | <opRel> | <rtMet>
 <opLog> ::= <termoLog> <simLog> <termoLog> | <termoLog> <simLog> <termoLog> <opLog> | '!' '(' <termoLog> ')' <simLog> <termoLog> | '!' '(' <termoLog> ')' <simLog> <termoLog> <opLog> | <termoLog> <simLog> '!' '(' <termoLog> ')' | <termoLog> <simLog> '!' '(' <termoLog> ')' <opLog>
-<termoRel> ::= numero | identificador | <rtMet>
+<termoRel> ::= Numero | Identificador | <rtMet>
 <opRel> ::= <termoRel> <simRel> <termoRel> | <termoRel> <simRel> <termoRel> <opRel>
-<arg> ::= identificador | numero | ',' <arg> | <vazio> 
-<rtMet> ::= identificador '.' identificador '(' <arg> ')'
+<arg> ::= Identificador | Numero | ',' <arg> | <vazio> 
+<rtMet> ::= Identificador '.' Identificador '(' <arg> ')'
          
 !Chamadas a métodos a partir de um objeto
 <NomeMetodo> ::= Identificador
 <NomeObjeto> ::= Identificador
-<ParametroCM> ::= <valor> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
+<ParametroCM> ::= <valorSemNum> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
 <ParametroCM-2> ::= <ParametroCM> | <ParametroCM> ',' <ParametroCM-2> 
 <MetodoComoParametro> ::= <NomeObjeto> '.' <NomeMetodo> '(' <ParametroCM-2> ')'
 <ChamdaMetodoObjeto> ::= <MetodoComoParametro> ';' 
