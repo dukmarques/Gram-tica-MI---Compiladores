@@ -52,14 +52,16 @@ Identifier   = {Letter}({AlphaNumeric} | '_')*
 !Add more values to the rule below - as needed
 
 <Value>                ::= Identifier |  '(' <Expression> ')' | 'true' | 'false'
+
+<Empty Value>          ::= <Value> |
                         
-<valorInicial>         ::= <Value> | <iniciarVetor> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
+<Initial Value>        ::= <Value> | <Init Array> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
           
-<iniciarVetor>         ::= '{' <iniciarVetor2> '}' ! cria as chaves externas da inicialização do vetor
+<Init Array>           ::= '{' <Init Array_2> '}' ! cria as chaves externas da inicialização do vetor
                 
-<iniciarVetor2>        ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor
+<Init Array_2>         ::= '(' <Init Array_3> ')' |  '(' <Init Array_3> ')' <Init Array_2> ! cria os parenteses internos da inicialização do vetor
                  
-<iniciarVetor3>        ::= <Value> | <Value> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
+<Init Array_3>         ::= <Value> | <Value> ',' <Init Array_3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
 
 <Declaration>          ::= <Type> Identifier
 
@@ -83,27 +85,31 @@ Identifier   = {Letter}({AlphaNumeric} | '_')*
 
 <Class>                ::= 'class' Identifier <Extends> '{' <Variables> | <Methods> '}'
 
-<Parameters>           ::= <Type> Identifier [',' <Parameters>]*
+<Parameters>           ::= <Declaration> <Parameter>
+
+<Parameter>            ::= ',' <Parameters> |
 
 <Methods>              ::= <Method> <Methods> |
 
-<Method>               ::= 'method' <Type> Identifier '(' <Parameters> ')' <Code Block>
+<Method>               ::= 'method' <Declaration> '(' <Parameters> ')' <Code Block>
 
 <Code Block>           ::= '{' <Code Statements> '}'
 
-<Code Statements>      ::= <If-Block> [<Code Statements>] | <Looping-Block> [<Code Statements>]
-                        | <Line Code> [<Code Statements>]
+<Code Statements>      ::= <If-Block> <Code Statements> | <Looping-Block> <Code Statements>
+                        | <Line Code> <Code Statements> |
                         
 <Condition>            ::= <Expression> | <Method Call>
                         
-<Method Call>          ::= Identifier '.' Identifier '(' [<Arguments>] ')' | Identifier '(' [<Arguments>] ')'
+<Method Call>          ::= Identifier '.' Identifier '(' <Arguments> ')' | Identifier '(' <Arguments> ')'
                         
-<Arguments>            ::= Identifier ['[' <Value> ']']* [',' <Arguments>]*
+<Arguments>            ::= <Initial Value> | ',' <Initial Value> |
 
-<Line Code>            ::= <Expression> ';' | 'return' [<Value>] ';' | <Method Call> ';'
+<Line Code>            ::= <Expression> ';' | 'return' <Empty Value> ';' | <Method Call> ';'
                         
-<If-Block>             ::= 'if' ['('] <Condition> [')'] 'then' <Code Block> [<Else-Block>]
+<If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
-<Else-Block>           ::= 'else' <If-Block> | 'else' <Code Block>
+<Else-Block>           ::= 'else' <Post-Else-Block>
+
+<Post-Else-Block>      ::= <If-Block> | <Code Block> |
                         
-<Looping-Block>        ::= 'while' ['('] <Condition> [')'] <Code Block>
+<Looping-Block>        ::= 'while' '(' <Condition> ')' <Code Block>
