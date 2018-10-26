@@ -13,13 +13,13 @@
     }
     
     method void tasmanianDevil(int giros){
-        if(giros > 50 && velocidade == 10)then{
+        if( (giros > 50) && (velocidade == 10) )then{
             nota.dez = 10;
             cuscuz.nota = nota.dez;
             read(Taz_Loucao, d.f, h.e); 
             write(Taz_Loucao, d.f);
                    
-        }else if(giros == 0 || !(velocidade))then{
+        }else if( (giros == 0) || !velocidade )then{
             write(Taz_Dormiu);        
         }
     }
@@ -31,7 +31,7 @@
             int newLife;
         }
         newLife = enemyLife - iv[2];
-        return newLife > 0;
+        return (newLife > 0);
     }
 
     method void sleep(){
