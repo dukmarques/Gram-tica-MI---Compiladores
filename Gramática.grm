@@ -90,7 +90,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
              | <Negado><ExpressaoLogica><OperLogicoConcat><Expressao>
 <Negado> ::= '!' | 
 <ExpressaoLogica> ::= '('<ExpressaoElemento><OperadorRelacional><ExpressaoElemento>')'
-<ExpressaoElemento> ::= Identificador | <MetodoComoParametro> | <Acesso a atributo> | Numero !falta vetor em uma posição
+<ExpressaoElemento> ::= Identificador | <MetodoComoParametro> | <Acesso a atributo> | Numero | CadeiaDeCaracteres !falta vetor em uma posição
 <ExpressoesBooleanas> ::= Identificador | Boolean | <MetodoComoParametro> | <Acesso a atributo> | <ChamadaMetodoLocal> ! falta vetor em uma posição que pode ser booleano
              
 !era cód. de expressão <valor> <OperadorRelacional> <valor>| <valor> <OperadorRelacional> <valor> <OperadorLogico> <Expressao>             
