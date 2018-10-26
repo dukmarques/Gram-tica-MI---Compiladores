@@ -60,7 +60,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Initial Value>        ::= <Init Array> | <Valid Values> | <Method Call>
                         
-<Method Call>          ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')' | <Valid Identifier> '(' <Arguments> ')'
+<Method Call>          ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')'
 
 <Multiple Identifier>  ::= ',' <Valid Identifier>
 
