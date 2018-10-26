@@ -1,9 +1,10 @@
-﻿! Welcome to GOLD Parser Builder 5.2
+﻿! Expressões lógicas        ! Welcome to GOLD Parser Builder 5.2
 "Name"          = 'Gramatica'
 "Author"        = 'PBL'
 "Version"       = '1.0'
 "About"         = 'Mi-Compiladores'
 "Start Symbol"  = <Inicio> 
+"Case Sensitive" = 'True'
                 
 ! Elementos Terminais
 Identificador      = {Letter}({AlphaNumeric} | '_')* | {CabecaDoIdentificador}{CaudaDoIdentificador}*
@@ -19,8 +20,8 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <numero> ::= Numero | '-'Numero |                 
 <valor> ::= Numero | CadeiaDeCaracteres | Boolean
 <valorSemNum> ::= CadeiaDeCaracteres | Boolean
-<elemento> ::= Numero | <id>
-<elementotop> ::= CadeiaDeCaracteres | <elemento>
+<elemento> ::= Numero | <id> | ! vazio
+<elementotop> ::= CadeiaDeCaracteres | <elemento> | <MetodoComoParametro>
 !<tipo> ::= identificador
 <id> ::= identificador <vetor> | identificador ! um identificador pode ser um vetor, exemplo int ou int[1]
 <vazio> ::= ! jeito que encontrei de fazer o comando vazio
@@ -28,7 +29,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <iniciarVetor> ::= '{' <iniciarVetor2> '}' ! cria as chaves externas da inicialização do vetor                
 <iniciarVetor2> ::= '(' <iniciarVetor3> ')' |  '(' <iniciarVetor3> ')' <iniciarVetor2> ! cria os parenteses internos da inicialização do vetor                 
 <iniciarVetor3> ::= <elementotop> | <elementotop> ',' <iniciarVetor3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
-<Acesso a atributo> ::= <NomeObjeto>'.'Identificador
+
 
 !Definições Básicas
 <Inicio> ::= <blococonst> <Classe> | <Classe>
@@ -40,8 +41,9 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
         
 !Classe
 <Classe> ::= 'class' <NomeClasse> '{' <Codigo> '}' <Classe> | 'class' <NomeClasse> 'extends' <NomeClasse> '{' <Codigo> '}' <Classe> |
-<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo> |
+<Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
 <NomeClasse> ::= Identificador
+<Acesso a atributo> ::= Identificador'.'Identificador
 
 !Constantes                   
 <blococonst> ::= const '{' <inicializarConst> '}' 
@@ -53,10 +55,9 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <blocovar> ::= variables '{' <declararInicializarVar> '}'  
 <declararInicializarVar> ::= <tipo> <declararInicializar> ';' <declararInicializarVar> 
                           | <Acesso a atributo>'='<valorInicial>';'<declararInicializarVar> | <vazio>
-<declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> 
-                       | <id>  '=' <valorInicial> ',' <declararInicializar>
-<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> | <MetodoComoParametro> | <Acesso a atributo> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros
-
+<declararInicializar> ::= <id> | <id>  ',' <declararInicializar> | <id> '=' <valorInicial> | <id>  '=' <valorInicial> ',' <declararInicializar>
+<valorInicial> ::= <Expr Arit> | <iniciarVetor> | <valorSemNum> 
+                | <MetodoComoParametro> | <Acesso a atributo> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros
                  
 !Atributos ! essa parte aqui não precisa utilizar... usa só o bloco variaveis de cima...
 <Atributos> ::= 'variables' '{' <MultAtributos> '}' 
@@ -64,14 +65,16 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <DeclaracaoAtributos> ::= <Argumento> ',' <DeclaracaoAtributos> | <Argumento> |
                  
 !Métodos
-<Metodo> ::= 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' Identificador ';' '}' 
+<Metodo> ::= 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' <Return Met> ';' '}' 
           | 'method' 'void' Identificador '(' <Parametros> ')' '{' <CodigoMetodo>  '}' 
-          | 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' Identificador ')' ';' '}'
+          !| 'method' <Tipo> Identificador '(' <Parametros> ')' '{' <CodigoMetodo> 'return' '(' <Return Met> ')' ';' '}'        expressão já tem parênteses. retirar na refatoração
+<Return Met> ::=  <Expressao> | !<Expr Arit>  Identificador | <valorSemNum> |    expressão já abrange todos esses casos
 <CodigoMetodo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> | <ChamdaMetodoObjeto> <Codigo>|
 <Parametros> ::= <Tipos> <Argumento> ',' <Parametros> | <Tipos> <Argumento> |
 
 !Aleatorios          
-<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum | Identificador '=' <ChamdaMetodoObjeto>
+<Atribuicao> ::= Identificador '=' <Expr Arit> ';' | Identificador '=' ValorSemNum | Identificador '=' <ChamdaMetodoObjeto> 
+              |  Identificador '=' <Acesso a atributo>';' |  <Acesso a atributo> '='<valorInicial>';'
 <Argumento> ::= Identificador | <Vetor> | <Matriz>
 <Tipos> ::= <Tipo> | <NomeClasse>
 
@@ -84,41 +87,53 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <If> ::= 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}'
       | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' '{' <Codigo> '}'
       | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' <If>
-      
-! EXPRESSÕES LÓGICAS
+
+! Expressões lógicas                               toda expressão lógica deve vim entre parênteses
 <Expressao> ::= <Negado><ExpressoesBooleanas> | <Negado><ExpressaoLogica> | <Negado><ExpressoesBooleanas><OperLogicoConcat><Expressao>
-             | <Negado><ExpressaoLogica><OperLogicoConcat><Expressao>
+             | <Negado><ExpressaoLogica><OperLogicoConcat><Expressao> | '('<Expressao>')'
 <Negado> ::= '!' | 
-<ExpressaoLogica> ::= '('<ExpressaoElemento><OperadorRelacional><ExpressaoElemento>')'
-<ExpressaoElemento> ::= Identificador | <MetodoComoParametro> | <Acesso a atributo> | Numero | CadeiaDeCaracteres !falta vetor em uma posição
-<ExpressoesBooleanas> ::= Identificador | Boolean | <MetodoComoParametro> | <Acesso a atributo> | <ChamadaMetodoLocal> ! falta vetor em uma posição que pode ser booleano
+<ExpressaoLogica> ::= <ExpressaoElemento><OperadorRelacional><ExpressaoElemento> | '('<ExpressaoLogica>')'
+                   !| '('<ExpressaoLogica>')'<ExpressaoLogica>
+<ExpressaoElemento> ::= Identificador | <MetodoComoParametro> | <Acesso a atributo> | Numero | CadeiaDeCaracteres | <ExpressaoLogica> !| '(' <ExpressaoElemento> ')'!falta vetor em uma posição
+<ExpressoesBooleanas> ::= Identificador | Boolean | <MetodoComoParametro> | <Acesso a atributo> | <ChamadaMetodoLocal> !| '(' <ExpressoesBooleanas> ')'! falta vetor em uma posição que pode ser booleano
              
-!era cód. de expressão <valor> <OperadorRelacional> <valor>| <valor> <OperadorRelacional> <valor> <OperadorLogico> <Expressao>             
-!<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTI UM NAO TERMINAL VALOR
+!<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTIR UM NAO TERMINAL VALOR
 
 !While
 <While> ::= 'while' '(' <Expressao> ')' '{' <Codigo> '}'
 
 !Read e Write
 <Read> ::= 'read' '(' <ParametrosLeitura> ')' ';'
-<ParametrosLeitura> ::= <Argumento> ',' <ParametrosLeitura> | <Argumento>        
+<ParametrosLeitura> ::= <Argumento> ',' <ParametrosLeitura> | <Acesso a atributo>',' <ParametrosLeitura> 
+                     | <Acesso a atributo> | <Argumento>        
 <Write> ::= 'write' '(' <ParametrosEscrita> ')' ';'
-<ParametrosEscrita> ::= <Argumento> ',' <ParametrosEscrita> | <Argumento> | '"' Identificador '"'
+<ParametrosEscrita> ::= <Argumento> ',' <ParametrosEscrita> |  <Acesso a atributo>',' <ParametrosEscrita> 
+                     | <Acesso a atributo>  | <Argumento> | '"' Identificador '"'
             
 !Expressoes aritméticas
-
-
-
 <Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
 <Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
-<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
+<Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | <rtMet> |  '('<Expr Arit>')'
 <Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
+                    
+!Expressoes Lógicas e Relacionais
+!Obs.: toda expressão negada deve vim entre parentíse -> ex. if(!(isVerdade)) ou if(vasco == serieA && !(vasco > ibis)) print('Vasco ainda é um clube');                
+!<simLog> ::= '||' | '&&'               
+!<simRel> ::= '<' | '<=' | '>=' | '>' | '==' | '='                     
+!<operacao> ::= <opLr> | <opLr> <operacao>
+!<opLr> ::= <opLog> | <opRel> | <opLog> <opLr> | <opRel> <opLr>        
+!<termoLog> ::= Identificador | <opRel> | <rtMet>
+!<opLog> ::= <termoLog> <simLog> <termoLog> | <termoLog> <simLog> <termoLog> <opLog> | '!' '(' <termoLog> ')' <simLog> <termoLog> | '!' '(' <termoLog> ')' <simLog> <termoLog> <opLog> | <termoLog> <simLog> '!' '(' <termoLog> ')' | <termoLog> <simLog> '!' '(' <termoLog> ')' <opLog>
+!<termoRel> ::= Numero | Identificador | <rtMet>
+!<opRel> ::= <termoRel> <simRel> <termoRel> | <termoRel> <simRel> <termoRel> <opRel>
+<arg> ::= Identificador | Numero | ',' <arg> | <vazio> 
+<rtMet> ::= Identificador '.' Identificador '(' <arg> ')'
          
 !Chamadas a métodos a partir de um objeto
 <NomeMetodo> ::= Identificador
 <NomeObjeto> ::= Identificador
-<ParametroCM> ::= <valor> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
+<ParametroCM> ::= <valorSemNum> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
 <ParametroCM-2> ::= <ParametroCM> | <ParametroCM> ',' <ParametroCM-2> 
 <MetodoComoParametro> ::= <NomeObjeto> '.' <NomeMetodo> '(' <ParametroCM-2> ')'
 <ChamdaMetodoObjeto> ::= <MetodoComoParametro> ';'
-<ChamadaMetodoLocal> ::= <NomeMetodo> '(' <ParametroCM-2> ')'
+<ChamadaMetodoLocal> ::= <NomeMetodo> '(' <ParametroCM-2> ')'oParametro> | <Acesso a atributo> | <ChamadaMetodoLocal> !| '(' <ExpressoesBooleanas> ')'! falta vetor em uma posição que pode ser booleano
