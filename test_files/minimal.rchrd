@@ -1,0 +1,20 @@
+class Pokemon{
+
+    variables {
+        int life[2] = {(12, 12)}, iv[4] = {(10, 21, 7, 19)};
+        int peso = 75;
+        string name;
+        float pronto = cuscuz.statusCuscuz();
+        
+        int vetor[2] = {(1, v.value())};  
+        int vetorzin[] = v.value();     
+    }
+    
+    method void tasmanianDevil(int giros){
+        if(v.v())then{
+            nota.dez = 10;
+            cuscuz.nota = nota.dez;
+            read(Taz_Loucao, d.f, h.e); 
+            write(Taz_Loucao, d.f);
+    }
+}
