@@ -35,6 +35,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <tipo> ::= 'float' | 'int'| 'string' | 'bool'
 !<TipoRetorno> ::= 'float' | 'int'| 'string' | 'bool' | 'void'
 <OperadorLogico> ::= '!' | '&&' | '||'
+<OperLogicoConcat> ::= '&&' | '||'
 <OperadorRelacional> ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
         
 !Classe
@@ -83,8 +84,16 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <If> ::= 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}'
       | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' '{' <Codigo> '}'
       | 'if' '(' <Expressao> ')' 'then' '{' <Codigo> '}' 'else' <If>
-<Expressao> ::= <valor> <OperadorRelacional> <valor>
-             |<valor> <OperadorRelacional> <valor> <OperadorLogico> <Expressao>             
+      
+! EXPRESSÕES LÓGICAS
+<Expressao> ::= <Negado><ExpressoesBooleanas> | <Negado><ExpressaoLogica> | <Negado><ExpressoesBooleanas><OperLogicoConcat><Expressao>
+             | <Negado><ExpressaoLogica><OperLogicoConcat><Expressao>
+<Negado> ::= '!' | 
+<ExpressaoLogica> ::= '('<ExpressaoElemento><OperadorRelacional><ExpressaoElemento>')'
+<ExpressaoElemento> ::= Identificador | <MetodoComoParametro> | <Acesso a atributo> | Numero !falta vetor em uma posição
+<ExpressoesBooleanas> ::= Identificador | Boolean | <MetodoComoParametro> | <Acesso a atributo> | <ChamadaMetodoLocal> ! falta vetor em uma posição que pode ser booleano
+             
+!era cód. de expressão <valor> <OperadorRelacional> <valor>| <valor> <OperadorRelacional> <valor> <OperadorLogico> <Expressao>             
 !<Valor> ::= Identificador | Numero  <-- COMENTADO PELO FATO DE JA EXISTI UM NAO TERMINAL VALOR
 
 !While
@@ -97,6 +106,9 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <ParametrosEscrita> ::= <Argumento> ',' <ParametrosEscrita> | <Argumento> | '"' Identificador '"'
             
 !Expressoes aritméticas
+
+
+
 <Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
 <Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
 <Valor Exp>        ::= Numero | Identificador | Identificador'['<numero>']' | '('<Expr Arit>')'
@@ -108,4 +120,5 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <ParametroCM> ::= <valor> | Identificador | <MetodoComoParametro> | '('<Expr Arit>')' | <Acesso a atributo> |
 <ParametroCM-2> ::= <ParametroCM> | <ParametroCM> ',' <ParametroCM-2> 
 <MetodoComoParametro> ::= <NomeObjeto> '.' <NomeMetodo> '(' <ParametroCM-2> ')'
-<ChamdaMetodoObjeto> ::= <MetodoComoParametro> ';' 
+<ChamdaMetodoObjeto> ::= <MetodoComoParametro> ';'
+<ChamadaMetodoLocal> ::= <NomeMetodo> '(' <ParametroCM-2> ')'
