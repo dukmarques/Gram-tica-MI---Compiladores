@@ -43,7 +43,7 @@ CadeiaDeCaracteres = '"' ({StringSimbolos} | '\' {Printable})* '"'
 <Classe> ::= 'class' <NomeClasse> '{' <Codigo> '}' <Classe> | 'class' <NomeClasse> 'extends' <NomeClasse> '{' <Codigo> '}' <Classe> |
 <Codigo> ::= <blocovar> <Codigo> | <Metodo> <Codigo> | <Atribuicao> <Codigo>| <If> <Codigo> | <While> <Codigo> | <Read> <Codigo> | <Write> <Codigo> |
 <NomeClasse> ::= Identificador
-<Acesso a atributo> ::= <NomeObjeto>'.'Identificador
+<Acesso a atributo> ::= Identificador'.'Identificador
 
 !Constantes                   
 <blococonst> ::= const '{' <inicializarConst> '}' 
