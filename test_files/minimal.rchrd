@@ -6,15 +6,18 @@ class Pokemon{
         string name;
         float pronto = cuscuz.statusCuscuz();
         
-        int vetor[2] = {(1, v.value())};  
-        int vetorzin[] = v.value();     
+        int vetor[2] = {(1, v.value())};
+        int array[] = v.newVector();
     }
     
     method void tasmanianDevil(int giros){
         if(v.v())then{
-            nota.dez = 10;
-            cuscuz.nota = nota.dez;
             read(Taz_Loucao, d.f, h.e); 
             write(Taz_Loucao, d.f);
+        } else if(v.v())then{
+            read(masoq);
+        } else {
+            write(masoq);
+        }
     }
 }

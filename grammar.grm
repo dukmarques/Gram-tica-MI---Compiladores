@@ -32,29 +32,35 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 <Negate Exp>           ::= '-' <Valor Exp> | <Valor Exp>
                         |
 
-<Expression>           ::= <Valor Exp>
+<Expression>           ::= <Valor Exp> |
 
 !Add more values to the rule below - as needed
 
-<Value>                ::= Identifier | 'true' | 'false' | StringLiteral | NumberTerminal
+<Value>                ::= 'true' | 'false' | StringLiteral | NumberTerminal
 
 <Empty Value>          ::= <Value> |
-                        
-<Initial Value>        ::= <Value> | <Init Array> ! um valor pode ser uma string, um boolean, um inteiro por exemplo, ou um conjunto de numeros no caso da inicialização de um vetor
 
 <Array>                ::= '[' <Expression> ']' <Array>  |
           
-<Init Array>           ::= '{' <Init Array_2> '}' ! cria as chaves externas da inicialização do vetor
+<Init Array>           ::= '{' <Init Array_2> '}'
                 
-<Init Array_2>         ::= '(' <Init Array_3> ')' |  '(' <Init Array_3> ')' <Init Array_2> ! cria os parenteses internos da inicialização do vetor
+<Init Array_2>         ::= '(' <Init Array_3> ')' |  '(' <Init Array_3> ')' <Init Array_2>
                  
-<Init Array_3>         ::= <Value> | <Value> ',' <Init Array_3>       ! preenche cada grupo de parenteses com numeros ex: (1,2,3)
+<Init Array_3>         ::= <Initial Value> | <Initial Value> ',' <Init Array_3>
 
 <Declaration>          ::= <Type> <Valid Identifier>
 
 <Valid Identifier>     ::= Identifier <Array>
 
 <Type>                 ::= 'string' | 'int' | 'void' | 'boolean' | Identifier
+                        
+<Attribute Access>     ::= '.' <Valid Identifier> <Attribute Access> |
+
+<Valid Values>         ::= <Value> | <Valid Identifier> <Attribute Access>
+                        
+<Initial Value>        ::= <Init Array> | <Valid Values> | <Method Call>
+                        
+<Method Call>          ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')' | <Valid Identifier> '(' <Arguments> ')'
 
 <Multiple Identifier>  ::= ',' <Valid Identifier>
 
@@ -70,19 +76,19 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 
 <Constants>            ::= 'constant' '{' <Constant Assignment> '}'
                         
-<Variables>             ::= 'variables' '{' <Variable Assignment> '}'
+<Variables>            ::= 'variables' '{' <Variable Assignment> '}'
                         
 <Extends>              ::= 'extends' Identifier |
+                        
+<Class Code>           ::= <Variables> <Class Code> | <Methods> <Class Code> |
 
-<Class>                ::= 'class' Identifier <Extends> '{' <Variables> | <Methods> '}'
+<Class>                ::= 'class' Identifier <Extends> '{' <Class Code> '}'
 
 <Parameters>           ::= <Declaration> <Parameter>
 
 <Parameter>            ::= ',' <Parameters> |
 
-<Methods>              ::= <Method> <Methods> |
-
-<Method>               ::= 'method' <Declaration> '(' <Parameters> ')' <Code Block>
+<Methods>              ::= 'method' <Declaration> '(' <Parameters> ')' <Code Block>
 
 <Code Block>           ::= '{' <Code Statements> '}'
 
@@ -91,23 +97,24 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Condition>            ::= <Expression> | <Method Call>
                         
-<Method Call>          ::= Identifier '.' Identifier '(' <Arguments> ')' | Identifier '(' <Arguments> ')'
-                        
 <Arguments>            ::= <Initial Value> | ',' <Initial Value> |
 
-<Line Code>            ::= <Expression> ';' | 'return' <Empty Value> ';' | <Method Call> ';'
+<Line Code>            ::= <Expression> ';' | 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';'
                         
 <If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
-<Else-Block>           ::= 'else' <Post-Else-Block>
+<Else-Block>           ::= 'else' <Post-Else-Block> |
 
 <Post-Else-Block>      ::= <If-Block> | <Code Block> |
                         
 <Looping-Block>        ::= 'while' '(' <Condition> ')' <Code Block>
 
-<Read>                 ::= 'read' '(' <ParametrosLeitura> ')' ';'
-<ParametrosLeitura>    ::= <Arguments> ',' <ParametrosLeitura> | <Acesso a atributo>',' <ParametrosLeitura> 
-                        | <Acesso a atributo> | <Argumento>        
-<Write>                ::= 'write' '(' <ParametrosEscrita> ')' ';'
-<ParametrosEscrita>    ::= <Arguments> ',' <ParametrosEscrita> |  <Acesso a atributo>',' <ParametrosEscrita> 
-                        | <Acesso a atributo>  | <Argumento> | '"' Identificador '"'
+<Read>                 ::= 'read' '(' <Valid Values> <Read Parameters> ')'
+                        
+<Read Parameters>      ::= ',' <Valid Values> <Read Parameters> |
+                           
+<Write>                ::= 'write' '(' <Write Parameters> ')'
+                        
+<To-Write>             ::= ',' <Valid Values> <To-Write> | ',' <Method Call> <To-Write> |
+
+<Write Parameters>     ::= <Valid Values> <To-Write> | <Method Call> <To-Write>
