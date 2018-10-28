@@ -75,21 +75,23 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Attribute Access>            ::= '.' <Valid Identifier> <Attribute Access> |
 
-<Valid Values>                ::= <Value> | <Valid Identifier> <Attribute Access>
+<Valid Values>                ::= <Value> <Increment-Decrement> | <Valid Identifier> <Attribute Access>
                         
-<Initial Value>               ::= <Init Array> | <Valid Values> | <Method Call>
+<Initial Value>               ::= <Init Array> | <Valid Values> <Increment-Decrement> | <Method Call>
+                               
+<Increment-Decrement>         ::= '++' | '--' |
                         
 <Method Call>                 ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')'
 
-<Multiple Identifier>         ::= ',' <Valid Identifier>
+<Multiple Identifier>         ::= ',' <Valid Identifier> <Multiple Identifier> |
 
-<Attributition>               ::= <Multiple Identifier> '=' <Expression> <Attributition> |
+<Initialize Constant>         ::= <Multiple Identifier> '=' <Expression> <Initialize Constant> |
 
-<Constant Assignment>         ::= <Declaration> '=' <Expression> <Attributition> ';' <Constant Assignment> |
+<Constant Assignment>         ::= <Declaration> '=' <Expression> <Initialize Constant> ';' <Constant Assignment> |
 
 <Initialize>                  ::= '=' <Expression> |
 
-<Initialize Variable>         ::= <Multiple Identifier> <Initialize> |
+<Initialize Variable>         ::= <Multiple Identifier> <Initialize>
                         
 <Variable Assignment>         ::=  <Declaration> <Initialize> <Initialize Variable> ';' <Variable Assignment> |
 
@@ -120,9 +122,11 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Arguments>                   ::= <Initial Value> <Argument> |
                         
-<Return Statement>            ::= <Initial Value> | <Condition Expression> |
+<Return Statement>            ::= <Initial Value> | <Condition Expression> | '(' <Return Statement> ')' |
+                               
+<Attributition>               ::= '=' <Expression> | <Increment-Decrement>
 
-<Line Code>                   ::= 'return' <Return Statement> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> '=' <Expression> ';'
+<Line Code>                   ::= 'return' <Return Statement> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> <Attributition> ';'
                         
 <If-Block>                    ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
