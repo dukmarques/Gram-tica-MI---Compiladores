@@ -25,113 +25,113 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 ! -------------------------------------------------
 
 ! The grammar starts below
-<Program>              ::= <Class> | <Constants>
+<Program>                     ::= <Class> <Program> | <Constants> <Program> |
 
-<Expr Arit>            ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp>
+<Expr Arit>                   ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp>
                         
-<Mult Exp>             ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp>
+<Mult Exp>                    ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp>
                         
-<Valor Exp>            ::= <Value> | '(' <Expr Arit> ')' | <Expr Arit>
+<Expression>                  ::= <Initial Value> | '(' <Expr Arit> ')' | <Expr Arit> |
                         
-<Negate Exp>           ::= '-' <Valor Exp> | <Valor Exp> |
-                        
-<Expression>           ::= <Initial Value> |
+<Negate Exp>                  ::= '-' <Expression>
                     
-<Relacional Operator>  ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
+<Relational Operator>         ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
                        
-<Logic Operator>       ::= '&&' | '||'
+<Logic Operator>              ::= '&&' | '||'
              
-<Negate>               ::= '!' <Negate> |
+<Negate>                      ::= '!' <Negate> |
           
 <Logic Expression>     ::= <Initial Value> <Logic Operator> <Initial Value> | <Initial Value>
                         
 <Negate Logic>         ::= <Negate> <Logic Expression>
                         
-<Relational Logic>     ::= <Relacional Operator> <Expression> <Relational Logic> | <Logic Operator> <Condition Expression> |
+<Relational Logic>     ::= <Relational Operator> <Expression> <Relational Logic> | <Logic Operator> <Condition Expression> |
                         
 <Condition Expression> ::= <Negate Logic> <Relational Logic> | '(' <Condition Expression> ')' <Relational Logic>
 
 !Add more values to the rule below - as needed
 
-<Value>                ::= 'true' | 'false' | StringLiteral | NumberTerminal
+<Value>                       ::= 'true' | 'false' | StringLiteral | NumberTerminal
 
-<Array>                ::= '[' <Expression> ']' <Array>  |
+<Array>                       ::= '[' <Expression> ']' <Array>  |
           
-<Init Array>           ::= '{' <Init Array_2> '}'
+<Init Array>                  ::= '{' <Init Array_2> '}'
                 
-<Init Array_2>         ::= '(' <Init Array_3> ')' |  '(' <Init Array_3> ')' <Init Array_2>
+<Init Array_2>                ::= '(' <Init Array_3> ')' |  '(' <Init Array_3> ')' <Init Array_2>
                  
-<Init Array_3>         ::= <Initial Value> | <Initial Value> ',' <Init Array_3>
+<Init Array_3>                ::= <Initial Value> | <Initial Value> ',' <Init Array_3>
 
-<Declaration>          ::= <Type> <Valid Identifier>
+<Declaration>                 ::= <Type> <Valid Identifier>
 
-<Valid Identifier>     ::= Identifier <Array>
+<Valid Identifier>            ::= Identifier <Array>
 
-<Type>                 ::= 'string' | 'int' | 'float' | 'bool' | 'void' | Identifier
+<Type>                        ::= 'string' | 'int' | 'float' | 'bool' | 'void' | Identifier
                         
-<Attribute Access>     ::= '.' <Valid Identifier> <Attribute Access> |
+<Attribute Access>            ::= '.' <Valid Identifier> <Attribute Access> |
 
-<Valid Values>         ::= <Value> | <Valid Identifier> <Attribute Access>
+<Valid Values>                ::= <Value> | <Valid Identifier> <Attribute Access>
                         
-<Initial Value>        ::= <Init Array> | <Valid Values> | <Method Call>
+<Initial Value>               ::= <Init Array> | <Valid Values> | <Method Call>
                         
-<Method Call>          ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')'
+<Method Call>                 ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')'
 
-<Multiple Identifier>  ::= ',' <Valid Identifier>
+<Multiple Identifier>         ::= ',' <Valid Identifier>
 
-<Attributition>        ::= <Multiple Identifier> '=' <Initial Value> <Attributition> |
+<Attributition>               ::= <Multiple Identifier> '=' <Initial Value> <Attributition> |
 
-<Constant Assignment>  ::= <Declaration> '=' <Initial Value> <Attributition> ';' <Constant Assignment> |
+<Constant Assignment>         ::= <Declaration> '=' <Initial Value> <Attributition> ';' <Constant Assignment> |
 
-<Initialize>           ::= '=' <Initial Value> |
+<Initialize>                  ::= '=' <Initial Value> |
 
-<Initialize Variable>  ::= <Multiple Identifier> <Initialize> |
+<Initialize Variable>         ::= <Multiple Identifier> <Initialize> |
                         
-<Variable Assignment>  ::=  <Declaration> <Initialize> <Initialize Variable> ';' <Variable Assignment> |
+<Variable Assignment>         ::=  <Declaration> <Initialize> <Initialize Variable> ';' <Variable Assignment> |
 
-<Constants>            ::= 'constant' '{' <Constant Assignment> '}'
+<Constants>                   ::= 'constant' '{' <Constant Assignment> '}'
                         
-<Variables>            ::= 'variables' '{' <Variable Assignment> '}'
+<Variables>                   ::= 'variables' '{' <Variable Assignment> '}'
                         
-<Extends>              ::= 'extends' Identifier |
+<Extends>                     ::= 'extends' Identifier |
                         
-<Class Code>           ::= <Variables> <Class Code> | <Methods> <Class Code> |
+<Class Code>                  ::= <Variables> <Class Code> | <Methods> <Class Code> |
 
-<Class>                ::= 'class' Identifier <Extends> '{' <Class Code> '}'
+<Class>                       ::= 'class' Identifier <Extends> '{' <Class Code> '}'
 
-<Parameters>           ::= <Declaration> <Parameter> |
+<Parameters>                  ::= <Declaration> <Parameter> |
 
-<Parameter>            ::= ',' <Parameters> |
+<Parameter>                   ::= ',' <Parameters> |
 
-<Methods>              ::= 'method' <Declaration> '(' <Parameters> ')' <Code Block>
+<Methods>                     ::= 'method' <Declaration> '(' <Parameters> ')' <Code Block>
 
-<Code Block>           ::= '{' <Code Statements> '}'
+<Code Block>                  ::= '{' <Code Statements> '}'
 
-<Code Statements>      ::= <If-Block> <Code Statements> | <Looping-Block> <Code Statements>
-                        | <Line Code> <Code Statements> | <Variables> <Code Statements> |
+<Code Statements>             ::= <If-Block> <Code Statements> | <Looping-Block> <Code Statements>
+                               | <Line Code> <Code Statements> | <Variables> <Code Statements> |
                         
-<Condition>            ::= <Condition Expression> | <Method Call>
+<Condition>                   ::= <Condition Expression> | <Method Call>
                         
-<Arguments>            ::= <Initial Value> | ',' <Initial Value> |
+<Argument>                    ::=  ',' <Initial Value> <Argument> |
                         
-<Return Statement>     ::= <Initial Value> | <Condition Expression> |
+<Arguments>                   ::= <Initial Value> <Argument> |
+                        
+<Return Statement>            ::= <Initial Value> | <Condition Expression> |
 
-<Line Code>            ::= 'return' <Return Statement> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> '=' <Expression> ';'
+<Line Code>                   ::= 'return' <Return Statement> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> '=' <Expression> ';'
                         
-<If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
+<If-Block>                    ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
-<Else-Block>           ::= 'else' <Post-Else-Block> |
+<Else-Block>                  ::= 'else' <Post-Else-Block> |
 
-<Post-Else-Block>      ::= <If-Block> | <Code Block> |
+<Post-Else-Block>             ::= <If-Block> | <Code Block> |
                         
-<Looping-Block>        ::= 'while' '(' <Condition> ')' <Code Block>
+<Looping-Block>               ::= 'while' '(' <Condition> ')' <Code Block>
 
-<Read>                 ::= 'read' '(' <Valid Values> <Read Parameters> ')'
+<Read>                        ::= 'read' '(' <Valid Values> <Read Parameters> ')'
                         
-<Read Parameters>      ::= ',' <Valid Values> <Read Parameters> |
+<Read Parameters>             ::= ',' <Valid Values> <Read Parameters> |
                            
-<Write>                ::= 'write' '(' <Write Parameters> ')'
+<Write>                       ::= 'write' '(' <Write Parameters> ')'
                         
-<To-Write>             ::= ',' <Valid Values> <To-Write> | ',' <Method Call> <To-Write> |
+<To-Write>                    ::= ',' <Valid Values> <To-Write> | ',' <Method Call> <To-Write> |
 
-<Write Parameters>     ::= <Valid Values> <To-Write> | <Method Call> <To-Write>
+<Write Parameters>            ::= <Valid Values> <To-Write> | <Method Call> <To-Write>
