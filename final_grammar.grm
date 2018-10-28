@@ -28,11 +28,9 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 
 <Expr Arit>            ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
 <Mult Exp>             ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
-<Valor Exp>            ::= <Value> | '('<Expr Arit>')'
-<Negate Exp>           ::= '-' <Valor Exp> | <Valor Exp>
-                        |
-
-<Expression>           ::= <Valor Exp> |
+<Valor Exp>            ::= <Value> | '(' <Expr Arit> ')'
+<Negate Exp>           ::= '-' <Valor Exp> | <Valor Exp> |
+<Expression>           ::= <Negate Exp> |
 
 !Add more values to the rule below - as needed
 
@@ -99,7 +97,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Arguments>            ::= <Initial Value> | ',' <Initial Value> |
 
-<Line Code>            ::= <Expression> ';' | 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';'
+<Line Code>            ::= <Expression> ';' | 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Expression> ';'
                         
 <If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
