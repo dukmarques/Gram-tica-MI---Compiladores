@@ -55,8 +55,6 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 
 <Value>                ::= 'true' | 'false' | StringLiteral | NumberTerminal
 
-<Empty Value>          ::= <Value> |
-
 <Array>                ::= '[' <Expression> ']' <Array>  |
           
 <Init Array>           ::= '{' <Init Array_2> '}'
@@ -115,8 +113,10 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 <Condition>            ::= <Condition Expression> | <Method Call>
                         
 <Arguments>            ::= <Initial Value> | ',' <Initial Value> |
+                        
+<Return Statement>     ::= <Initial Value> | <Condition Expression> |
 
-<Line Code>            ::= 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> '=' <Expression> ';'
+<Line Code>            ::= 'return' <Return Statement> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> '=' <Expression> ';'
                         
 <If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
