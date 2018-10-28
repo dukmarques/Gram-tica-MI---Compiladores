@@ -15,6 +15,7 @@ class Pokemon{
             read(Taz_Loucao, d.f, h.e); 
             if(v.v()) then{
                 read(masoq);
+                a = 2;
             }
             write(Taz_Loucao, d.f);
         } else if(v.v())then{

@@ -116,7 +116,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Arguments>            ::= <Initial Value> | ',' <Initial Value> |
 
-<Line Code>            ::= 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> '=' <Expression> ';'
+<Line Code>            ::= 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> '=' <Expression> ';'
                         
 <If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        
