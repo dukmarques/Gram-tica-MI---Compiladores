@@ -1,9 +1,10 @@
-﻿"Name"     = 'RICHARD'
-"Author"   = 'João Victor, Eduardo Marques, Gustavo Henrique, Marcos Aldrey, Marcos Vinicius, Alyson, Alisson, André, Gilvaney, Nielson'
-"Version"  = 'The version of the grammar and/or language'
-"About"    = 'A short description of the grammar'
+﻿"Name"           = 'RICHARD'
+"Author"         = 'João Victor, Eduardo Marques, Gustavo Henrique, Marcos Aldrey, Marcos Vinicius, Alyson, Alisson, André, Gilvaney, Nielson, Lucas Cardoso'
+"Version"        = 'The version of the grammar and/or language'
+"About"          = 'A short description of the grammar'
+"Case Sensitive" = 'True'
 
-"Start Symbol" = <Program>
+"Start Symbol"   = <Program>
 
 ! -------------------------------------------------
 ! Character Sets
@@ -26,11 +27,29 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 ! The grammar starts below
 <Program>              ::= <Class> | <Constants>
 
-<Expr Arit>            ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
-<Mult Exp>             ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
-<Valor Exp>            ::= <Value> | '(' <Expr Arit> ')'
+<Expr Arit>            ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp>
+                        
+<Mult Exp>             ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp>
+                        
+<Valor Exp>            ::= <Value> | '(' <Expr Arit> ')' | <Expr Arit>
+                        
 <Negate Exp>           ::= '-' <Valor Exp> | <Valor Exp> |
-<Expression>           ::= <Negate Exp> |
+                        
+<Expression>           ::= <Initial Value> |
+                    
+<Relacional Operator>  ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
+                       
+<Logic Operator>       ::= '&&' | '||'
+             
+<Negate>               ::= '!' <Negate> |
+          
+<Logic Expression>     ::= <Initial Value> <Logic Operator> <Initial Value> | <Initial Value>
+                        
+<Negate Logic>         ::= <Negate> <Logic Expression>
+                        
+<Relational Logic>     ::= <Relacional Operator> <Expression> <Relational Logic> | <Logic Operator> <Condition Expression> |
+                        
+<Condition Expression> ::= <Negate Logic> <Relational Logic> | '(' <Condition Expression> ')' <Relational Logic>
 
 !Add more values to the rule below - as needed
 
@@ -50,7 +69,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 
 <Valid Identifier>     ::= Identifier <Array>
 
-<Type>                 ::= 'string' | 'int' | 'void' | 'boolean' | Identifier
+<Type>                 ::= 'string' | 'int' | 'float' | 'bool' | 'void' | Identifier
                         
 <Attribute Access>     ::= '.' <Valid Identifier> <Attribute Access> |
 
@@ -82,7 +101,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 
 <Class>                ::= 'class' Identifier <Extends> '{' <Class Code> '}'
 
-<Parameters>           ::= <Declaration> <Parameter>
+<Parameters>           ::= <Declaration> <Parameter> |
 
 <Parameter>            ::= ',' <Parameters> |
 
@@ -91,13 +110,13 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 <Code Block>           ::= '{' <Code Statements> '}'
 
 <Code Statements>      ::= <If-Block> <Code Statements> | <Looping-Block> <Code Statements>
-                        | <Line Code> <Code Statements> |
+                        | <Line Code> <Code Statements> | <Variables> <Code Statements> |
                         
-<Condition>            ::= <Expression> | <Method Call>
+<Condition>            ::= <Condition Expression> | <Method Call>
                         
 <Arguments>            ::= <Initial Value> | ',' <Initial Value> |
 
-<Line Code>            ::= <Expression> ';' | 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Expression> ';'
+<Line Code>            ::= 'return' <Empty Value> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> '=' <Expression> ';'
                         
 <If-Block>             ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        

@@ -5,14 +5,17 @@ class Pokemon{
         int peso = 75;
         string name;
         float pronto = cuscuz.statusCuscuz();
-        
+    
         int vetor[2] = {(1, v.value())};
         int array[] = v.newVector();
     }
     
-    method void tasmanianDevil(int giros){
-        if(v.v())then{
+    method void tasmanianDevil(){
+        if((12 > 10) && true)then{
             read(Taz_Loucao, d.f, h.e); 
+            if(v.v()) then{
+                read(masoq);
+            }
             write(Taz_Loucao, d.f);
         } else if(v.v())then{
             read(masoq);
