@@ -1,0 +1,165 @@
+﻿"Name"    = 'Nova Gramatica'
+"Version" = '1.0 beta'
+"Author"  = 'Lucas Cardoso'
+
+"Case Sensitive" = 'True'
+"Start Symbol" = <Inicio>
+               
+!Definições básicas
+Numero = {Number}+('.'{Number}+)?
+Identificador      = {Letter}({AlphaNumeric} | '_')*
+Boolean = 'true' | 'false'
+{String Char} = {Printable} - ["\]
+CadeiaCarac = '"' ({String Char} | '\'{Printable})* '"'
+
+!Inicio da Gramática       
+<Inicio> ::=  <Constantes> <Classe> 
+          | <Classe>  
+          
+!Outras Definições
+<Numero> ::= Numero | '-'Numero
+<Tipos Primitivos> ::= 'int'
+                    | 'bool'
+                    | 'float'
+                    | 'string'
+<Operador Relacional> ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
+<Op Inc Dec>          ::= '++' | '--'                       
+
+!Constantes
+<Constantes> ::= 'const' '{' <Codigo Constantes> '}'
+<Codigo Constantes> ::= <Tipos Primitivos> <Declaracao Constantes> ';' <Codigo Constantes> 
+                     | 
+<Declaracao Constantes> ::= Identificador 
+                         | Identificador '=' <Valor Inicializacao> 
+                         | Identificador ',' <Declaracao Constantes> 
+                         | Identificador '=' <Valor Inicializacao> ',' <Declaracao Constantes>
+
+!Variaveis
+<Variaveis> ::= 'variables' '{' <Codigo Variaveis> '}'
+<Codigo Variaveis> ::= <Tipos Primitivos> <Declaracao Variaveis> ';' <Codigo Variaveis> 
+                    | Identificador <Declaracao Variaveis> ';' <Codigo Variaveis> 
+                    | 
+<Declaracao Variaveis> ::= Identificador 
+                        | Identificador '=' <Valor Inicializacao> 
+                        | Identificador ',' <Declaracao Variaveis> 
+                        | Identificador '=' <Valor Inicializacao> ',' <Declaracao Variaveis>
+                        | Identificador<Matriz>
+                        | Identificador<Matriz> '=' <Inicializa Matriz>
+                        | Identificador<Matriz> '=' <Inicializa Matriz> ',' <Declaracao Variaveis>
+
+!Coisas Importantes
+<Valor Inicializacao> ::= <Expr Arit> 
+                       | Boolean
+                       | CadeiaCarac
+<Retorno> ::= '(' <Valores Retorno> ')'
+           | <Valores Retorno>
+<Valores Retorno> ::= <Numero> 
+           | Boolean 
+           | Identificador 
+           | 'void'
+           |
+<Atribuicao> ::= Identificador '=' <Valor Inicializacao> ';'
+              |  Identificador '=' <Acesso atributo>
+              |  Identificador<Op Inc Dec> ';'
+              |  <Acesso atributo> '=' <Valor Inicializacao> ';'
+                       
+!Classe
+<Classe> ::= 'class' Identificador '{' <Codigo Classe> '}' <Classe> 
+          | 'class' Identificador 'extends' Identificador '{' <Codigo Classe> '}' <Classe> 
+          |
+<Codigo Classe> ::= <Variaveis> <Codigo Classe> 
+                 | <Metodo> <Codigo Classe> 
+                 | <Chamada Metodo> ';' <Codigo Classe>
+                 | <Acesso Atributo> ';' <Codigo Classe>
+                 | 
+
+!Metodos
+<Metodo> ::= 'method' <Tipo Retorno> Identificador '(' <Parametros Metodo> ')' '{' <Codigo Metodo> 'return' <Retorno> ';' '}'
+<Tipo Retorno> ::= <Tipos Primitivos> 
+                | 'void'
+                | Identificador
+<Parametros Metodo> ::= <Tipos Parametros> Identificador ',' <Parametros Metodo> 
+                     | <Tipos Parametros> Identificador
+                     | <Tipos Parametros> Identifficador<Matriz> ',' <Parametros Metodo>
+                     | <Tipos Parametros> Identificador<Matriz>
+                     |
+<Tipos Parametros> ::= <Tipos Primitivos>
+                    | Identificador
+<Codigo Metodo> ::= <Variaveis> <Codigo Metodo>
+                 | <If> <Codigo Metodo>
+                 | <While> <Codigo Metodo>
+                 | <Read> <Codigo Metodo>
+                 | <Write> <Codigo Metodo>
+                 | <Atribuicao> <Codigo Metodo>
+                 | <Chamada Metodo> ';' <Codigo Metodo>
+                 |
+                 
+
+!Vetores e Matrizes
+<Matriz> ::= '[' <Idice Matriz> ']' <Matriz> 
+          | '[' <Idice Matriz> ']' 
+<Idice Matriz> ::= Numero
+                | Identificador
+<Inicializa Matriz> ::= '{' <Linhas Matriz> '}' 
+<Linhas Matriz> ::= '(' <Colunas Matriz> ')' ',' <Linhas Matriz> | '(' <Colunas Matriz> ')'
+<Colunas Matriz> ::= Numero ',' <Colunas Matriz> 
+                  | Numero
+
+!Chamada de Método
+<Chamada Metodo> ::= Identificador'.'Identificador'('<Argumentos Metodo>')'
+                  | Identificador'('<Argumentos Metodo>')'
+!Definir o que pode ser passado como argumento de uma função
+<Argumentos Metodo> ::= <Valores Argumentos> ',' <Argumentos Metodo> 
+                     | <Valores Argumentos>
+<Valores Argumentos> ::= <Numero> 
+                     | Boolean 
+                     | <Chamada Metodo>
+                     | Identificador
+                     | Identificador<Matriz>
+                     | <Acesso Atributo>
+                     |
+
+!Expressoes aritméticas
+<Expr Arit>        ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp> 
+<Mult Exp>         ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp> 
+<Valor Exp>        ::= Numero | Identificador | Identificador<Matriz> | <Chamada Metodo> |  <Acesso Atributo> |  '('<Expr Arit>')'
+<Negate Exp>       ::= '-' <Valor Exp> | <Valor Exp>
+
+!Acesso a atributo
+<Acesso Atributo> ::= Identificador'.'Identificador
+                   | Identificador<Matriz>'.'Identificador
+
+!If
+<If> ::= 'if' '(' <Expressao Logica> ')' <Variacoes If>
+<Variacoes If> ::= 'then' '{' <Codigo If> '}'
+                | 'then' '{' <Codigo If> '}' <Variacoes Else>
+<Variacoes Else> ::= 'else' '{' <Codigo If> '}'
+                  | 'else' <If>
+<Codigo If> ::= <Read> <Codigo If>
+             | <Write> <Codigo If>
+             | <Atribuicao> <Codigo If>
+             |
+<Expressao Logica> ::= Identificador <Operador Relacional> <Opcoes Expressao Logica>
+<Opcoes Expressao Logica> ::= Identificador
+                           | <Numero>
+                           | Identificador<Matriz>
+
+!While
+<While> ::= 'while' '(' <Expressao Logica> ')' '{' <Codigo If> '}'
+
+!Read
+<Read> ::= 'read' '(' <Parametro Read> ')' ';'
+<Parametro Read> ::= <Opcoes Read> ',' <Parametro Read>
+                  | <Opcoes Read>
+<Opcoes Read> ::= Identificador
+               | Identificador<Matriz>
+
+!Write
+<Write> ::= 'write' '(' <Conteudo Write> ')' ';'
+<Conteudo Write> ::= <Opcoes Write> ',' <Conteudo Write>
+                  | <Opcoes Write>
+<Opcoes Write> ::= Identificador
+                | Identificador<Matriz>
+                | <Acesso Atributo>
+                | CadeiaCarac
+
