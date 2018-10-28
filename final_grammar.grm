@@ -85,7 +85,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 
 <Attributition>               ::= <Multiple Identifier> '=' <Expression> <Attributition> |
 
-<Constant Assignment>         ::= <Declaration> '=' <Initial Value> <Attributition> ';' <Constant Assignment> |
+<Constant Assignment>         ::= <Declaration> '=' <Expression> <Attributition> ';' <Constant Assignment> |
 
 <Initialize>                  ::= '=' <Expression> |
 
@@ -93,7 +93,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Variable Assignment>         ::=  <Declaration> <Initialize> <Initialize Variable> ';' <Variable Assignment> |
 
-<Constants>                   ::= 'constant' '{' <Constant Assignment> '}'
+<Constants>                   ::= 'const' '{' <Constant Assignment> '}'
                         
 <Variables>                   ::= 'variables' '{' <Variable Assignment> '}'
                         

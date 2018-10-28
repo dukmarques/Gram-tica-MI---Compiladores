@@ -1,3 +1,7 @@
+const {
+    int CONSTANT = 1 - 2;
+}
+
 class Pokemon{
 
     variables {
