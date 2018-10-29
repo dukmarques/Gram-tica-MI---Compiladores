@@ -1,6 +1,6 @@
-﻿"Name"    = 'Nova Gramatica'
+﻿"Name"    = 'Nome Aleatóio'
 "Version" = '1.0 beta'
-"Author"  = 'Lucas Cardoso'
+"Author"  = 'Todos da Sessão'
 
 "Case Sensitive" = 'True'
 "Start Symbol" = <Inicio>
@@ -22,6 +22,7 @@ CadeiaCarac = '"' ({String Char} | '\'{Printable})* '"'
                     | 'bool'
                     | 'float'
                     | 'string'
+<Operador Logico> ::= '!' | '&&' | '||'
 <Operador Relacional> ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
 <Op Inc Dec>          ::= '++' | '--'                       
 
@@ -46,18 +47,14 @@ CadeiaCarac = '"' ({String Char} | '\'{Printable})* '"'
                         | Identificador<Matriz>
                         | Identificador<Matriz> '=' <Inicializa Matriz>
                         | Identificador<Matriz> '=' <Inicializa Matriz> ',' <Declaracao Variaveis>
+                        | Identificador<Matriz> '=' <Chamada Metodo>
+                        | Identificador<Matriz> '=' <Chamada Metodo> ',' <Declaracao Variaveis>
 
 !Coisas Importantes
 <Valor Inicializacao> ::= <Expr Arit> 
                        | Boolean
                        | CadeiaCarac
-<Retorno> ::= '(' <Valores Retorno> ')'
-           | <Valores Retorno>
-<Valores Retorno> ::= <Numero> 
-           | Boolean 
-           | Identificador 
-           | 'void'
-           |
+
 <Atribuicao> ::= Identificador '=' <Valor Inicializacao> ';'
               |  Identificador '=' <Acesso atributo>
               |  Identificador<Op Inc Dec> ';'
@@ -93,17 +90,25 @@ CadeiaCarac = '"' ({String Char} | '\'{Printable})* '"'
                  | <Atribuicao> <Codigo Metodo>
                  | <Chamada Metodo> ';' <Codigo Metodo>
                  |
-                 
+<Retorno> ::= '(' <Valores Retorno> ')'
+           | <Valores Retorno>
+<Valores Retorno> ::= <Numero> 
+           | Boolean 
+           | Identificador 
+           | 'void'
+           |
 
 !Vetores e Matrizes
 <Matriz> ::= '[' <Idice Matriz> ']' <Matriz> 
           | '[' <Idice Matriz> ']' 
 <Idice Matriz> ::= Numero
                 | Identificador
+                |
 <Inicializa Matriz> ::= '{' <Linhas Matriz> '}' 
 <Linhas Matriz> ::= '(' <Colunas Matriz> ')' ',' <Linhas Matriz> | '(' <Colunas Matriz> ')'
 <Colunas Matriz> ::= Numero ',' <Colunas Matriz> 
                   | Numero
+                  | <Chamada Metodo>
 
 !Chamada de Método
 <Chamada Metodo> ::= Identificador'.'Identificador'('<Argumentos Metodo>')'
@@ -138,12 +143,18 @@ CadeiaCarac = '"' ({String Char} | '\'{Printable})* '"'
 <Codigo If> ::= <Read> <Codigo If>
              | <Write> <Codigo If>
              | <Atribuicao> <Codigo If>
+             | <If> <Codigo If>             
              |
-<Expressao Logica> ::= Identificador <Operador Relacional> <Opcoes Expressao Logica>
+<Expressao Logica> ::= <Escopo Expressao If> <Operador Logico> <Expressao Logica>
+                    | <Escopo Expressao If>
+<Escopo Expressao If> ::= <Opcoes Expressao Logica> <Operador Relacional> <Opcoes Expressao Logica>
+                       | '(' <Opcoes Expressao Logica> <Operador Relacional> <Opcoes Expressao Logica> ')'
+                       | Boolean
+                       |<Chamada Metodo>
 <Opcoes Expressao Logica> ::= Identificador
                            | <Numero>
                            | Identificador<Matriz>
-
+                           | Boolean
 !While
 <While> ::= 'while' '(' <Expressao Logica> ')' '{' <Codigo If> '}'
 
@@ -153,6 +164,7 @@ CadeiaCarac = '"' ({String Char} | '\'{Printable})* '"'
                   | <Opcoes Read>
 <Opcoes Read> ::= Identificador
                | Identificador<Matriz>
+               | <Acesso Atributo>
 
 !Write
 <Write> ::= 'write' '(' <Conteudo Write> ')' ';'
