@@ -29,7 +29,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                                
 <Expr Arit>                   ::= <Mult Exp> '+' <Expression> | <Mult Exp> '-' <Expression> | <Mult Exp>
                         
-<Mult Exp>                    ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp>
+<Mult Exp>                    ::= <Negate Exp> '*' <Expression> | <Negate Exp> '/' <Expression> | <Negate Exp>
                         
 <Expression>                  ::= '(' <Expr Arit> ')' | <Expr Arit>
                         
@@ -112,7 +112,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Arguments>                   ::= <Initial Value> <Argument> |
                         
-<Return Statement>            ::= <Condition> | <Expression> | '(' <Return Statement> ')' |
+<Return Statement>            ::= <Condition> | '(' <Return Statement> ')' |
                                
 <Attributition>               ::= '=' <Expression> | <Increment-Decrement>
 
