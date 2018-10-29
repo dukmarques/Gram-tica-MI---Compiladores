@@ -34,10 +34,8 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 <Mult Exp>                    ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp>
                         
 <Expression>                  ::= '(' <Expr Arit> ')' | <Expr Arit>
-                               
-<Minus>                       ::= '-' |
                         
-<Negate Exp>                  ::= <Minus> <Expression> | <Minus> <Initial Value>
+<Negate Exp>                  ::= '-' <Initial Value> | <Initial Value>
                     
 <Relational Operator>         ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
                        
@@ -75,11 +73,11 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Attribute Access>            ::= '.' <Valid Identifier> <Attribute Access> |
 
-<Valid Values>                ::= <Value> <Increment-Decrement> | <Valid Identifier> <Attribute Access>
+<Valid Values>                ::= <Value> | <Valid Identifier> <Attribute Access>
                         
 <Initial Value>               ::= <Init Array> | <Valid Values> <Increment-Decrement> | <Method Call>
                                
-<Increment-Decrement>         ::= '++' | '--' |
+<Increment-Decrement>         ::= '++' <Increment-Decrement> | '--' <Increment-Decrement> |
                         
 <Method Call>                 ::= <Valid Identifier> <Attribute Access> '(' <Arguments> ')'
 
@@ -122,7 +120,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Arguments>                   ::= <Initial Value> <Argument> |
                         
-<Return Statement>            ::= <Initial Value> | <Condition Expression> | '(' <Return Statement> ')' |
+<Return Statement>            ::= <Condition Expression> | <Expression> | '(' <Return Statement> ')' |
                                
 <Attributition>               ::= '=' <Expression> | <Increment-Decrement>
 
