@@ -27,9 +27,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 ! The grammar starts below
 <Program>                     ::= <Class> <Program> | <Constants> <Program> |
                                
-
-
-<Expr Arit>                   ::= <Mult Exp> '+' <Expr Arit> | <Mult Exp> '-' <Expr Arit> | <Mult Exp>
+<Expr Arit>                   ::= <Mult Exp> '+' <Expression> | <Mult Exp> '-' <Expression> | <Mult Exp>
                         
 <Mult Exp>                    ::= <Negate Exp> '*' <Mult Exp> | <Negate Exp> '/' <Mult Exp> | <Negate Exp>
                         
@@ -37,24 +35,20 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                         
 <Negate Exp>                  ::= '-' <Initial Value> | <Initial Value>
                     
-<Relational Operator>         ::= '!=' | '==' | '<' | '<=' | '>' | '>=' | '='
+<Relational Operator>         ::= '!=' | '==' | '<' | '<=' | '>' | '>='
                        
 <Logic Operator>              ::= '&&' | '||'
 
 <Negate>                      ::= '!' <Negate> |
-          
-<Logic Expression>            ::= <Initial Value> <Logic Operator> <Initial Value> | <Initial Value>
-                        
-<Negate Logic>                ::= <Negate> <Logic Expression>
-                        
-<Relational Logic>            ::= <Relational Operator> <Expression> <Relational Logic> | <Logic Operator> <Condition Expression> |
-                        
-<Condition Expression>        ::= <Negate Logic> <Relational Logic> | '(' <Condition Expression> ')' <Relational Logic>
+
+<Relational Logic>            ::= <Relational Operator> <Condition> | <Logic Operator> <Condition> |
+
+<Condition>                   ::= <Negate> <Expression> <Relational Logic> | '(' <Condition> ')' <Relational Logic>
 
 !Add more values to the rule below - as needed
 
 <Value>                       ::= 'true' | 'false' | StringLiteral | NumberTerminal
-                               
+
 <Array Position>              ::= <Expression> |
 
 <Array>                       ::= '[' <Array Position> ']' <Array>  |
@@ -114,13 +108,11 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 <Code Statements>             ::= <If-Block> <Code Statements> | <Looping-Block> <Code Statements>
                                | <Line Code> <Code Statements> | <Variables> <Code Statements> |
                         
-<Condition>                   ::= <Condition Expression> | <Method Call>
-                        
 <Argument>                    ::=  ',' <Initial Value> <Argument> |
                         
 <Arguments>                   ::= <Initial Value> <Argument> |
                         
-<Return Statement>            ::= <Condition Expression> | <Expression> | '(' <Return Statement> ')' |
+<Return Statement>            ::= <Condition> | <Expression> | '(' <Return Statement> ')' |
                                
 <Attributition>               ::= '=' <Expression> | <Increment-Decrement>
 
