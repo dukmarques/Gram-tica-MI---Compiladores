@@ -106,7 +106,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
 <Code Block>                  ::= '{' <Code Statements> '}'
 
 <Code Statements>             ::= <If-Block> <Code Statements> | <Looping-Block> <Code Statements>
-                               | <Line Code> <Code Statements> | <Variables> <Code Statements> |
+                               | <Line Code> ';' <Code Statements> | <Variables> <Code Statements> |
                         
 <Argument>                    ::=  ',' <Initial Value> <Argument> |
                         
@@ -116,7 +116,7 @@ NumberTerminal       = {Number}+('.'{Number}+)?
                                
 <Attributition>               ::= '=' <Expression> | <Increment-Decrement>
 
-<Line Code>                   ::= 'return' <Return Statement> ';' | <Method Call> ';' | <Read> ';' | <Write> ';' | <Valid Identifier> <Attribute Access> <Attributition> ';'
+<Line Code>                   ::= 'return' <Return Statement> | <Method Call> | <Read> | <Write> | <Valid Identifier> <Attribute Access> <Attributition>
                         
 <If-Block>                    ::= 'if' '(' <Condition> ')' 'then' <Code Block> <Else-Block>
                        

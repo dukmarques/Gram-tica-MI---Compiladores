@@ -1,4 +1,4 @@
-﻿const {
+const {
     int max1 = 10, max2 = 20;
     float pi = 3.1415;
 }
@@ -27,14 +27,14 @@ class aluno extends pessoa {
             write(x[i].nome, x[i].endereco, x[i].idade, x[i].curso, x[i].matricula, x[i].bolsa);
             i++;        
         }
-        return (void);  // Este caso de retorno o grupo deve decidir se terá ou não. Se tiver, o grupo define como será.
+        return;
     }
 
     method void imprimir ( ) {
         write("Imprimindo dados do aluno");
         write(nome, endereco, idade, curso, matricula, curso);
         
-        return (void);
+        return;
     }
     
     method float calcula_aumento_bolsa (float bolsa, float juros) {
@@ -46,13 +46,13 @@ class aluno extends pessoa {
     }
 
     method void main ( ) {
-    	variables {
+        variables {
             aluno objaluno1, objaluno2, objaluno3;
             float x;    
         }
         objaluno1.bolsa = calcula_aumento_bolsa(objaluno1.bolsa, 0.30);
-        objaluno1.imprimir();'
-	}
+        objaluno1.imprimir();
+    }
     
 } 
 
